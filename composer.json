@@ -1,0 +1,22 @@
+{
+    "name": "admin/courses",
+    "description": "Manage courses: add, edit, or remove them to help users find relevant information.",
+    "type": "library",
+    "version": "1.0.0",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "admin\\courses\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "admin\\courses\\CourseServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
+  
