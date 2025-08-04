@@ -5,7 +5,7 @@
 @section('page-title', isset($course) ? 'Edit Course' : 'Create Course')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('admin.courses.index') }}">Manage Courses</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.courses.index') }}">Course Manager</a></li>
     <li class="breadcrumb-item active" aria-current="page">{{ isset($course) ? 'Edit Course' : 'Create Course' }}</li>
 @endsection
 
