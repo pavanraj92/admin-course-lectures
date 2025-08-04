@@ -44,6 +44,11 @@ class CourseCreateRequest extends FormRequest
             'categories.*' => 'exists:categories,id',
             'course_tags' => 'nullable|array',
             'course_tags.*' => 'exists:tags,id',
+            
+            // Section validation
+            'sections' => 'nullable|array',
+            'sections.*.title' => 'required|string|max:255',
+            'sections.*.id' => 'nullable|integer|exists:course_sections,id',
         ];
     }
 

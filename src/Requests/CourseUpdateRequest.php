@@ -46,6 +46,11 @@ class CourseUpdateRequest extends FormRequest
             'categories.*' => 'exists:categories,id',
             'course_tags' => 'nullable|array',
             'course_tags.*' => 'exists:tags,id',
+            
+            // Section validation
+            'sections' => 'nullable|array',
+            'sections.*.title' => 'required|string|max:255',
+            'sections.*.id' => 'nullable|integer|exists:course_sections,id',
         ];
     }
 
@@ -74,6 +79,8 @@ class CourseUpdateRequest extends FormRequest
             'categories.*.exists' => 'Selected category does not exist.',
             'course_tags.array' => 'Tags must be an array.',
             'course_tags.*.exists' => 'Selected tag does not exist.',
+            'sections.array' => 'Sections must be an array.',
+            'sections.*.title.required' => 'Section title is required.',
         ];
     }
 }

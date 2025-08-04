@@ -95,6 +95,18 @@ class CourseManagerController extends Controller
                 $course->courseTags()->sync($requestData['course_tags']);
             }
 
+            // Handle course sections
+            if (isset($requestData['sections']) && is_array($requestData['sections'])) {
+                foreach ($requestData['sections'] as $sectionData) {
+                    if (!empty($sectionData['title'])) {
+                        $course->sections()->create([
+                            'title' => $sectionData['title'],
+                            'slug' => Str::slug($sectionData['title'])
+                        ]);
+                    }
+                }
+            }
+
             return redirect()->route('admin.courses.index')->with('success', 'Course created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to create course: ' . $e->getMessage());
@@ -107,7 +119,7 @@ class CourseManagerController extends Controller
     public function show(Course $course)
     {
         try {
-            $course->load(['categories', 'courseTags']);
+            $course->load(['categories', 'courseTags', 'sections']);
             return view('course::admin.show', compact('course'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load course: ' . $e->getMessage());
@@ -117,7 +129,7 @@ class CourseManagerController extends Controller
     public function edit(Course $course)
     {
         try {
-            $course->load(['categories', 'courseTags']);
+            $course->load(['categories', 'courseTags', 'sections']);
             $categories = Category::all();
             $tags = Tag::all();
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
@@ -163,6 +175,43 @@ class CourseManagerController extends Controller
                 $course->courseTags()->sync($requestData['course_tags']);
             } else {
                 $course->courseTags()->sync([]);
+            }
+
+            // Handle course sections
+            if (isset($requestData['sections']) && is_array($requestData['sections'])) {
+                // Get existing sections
+                $existingSections = $course->sections()->pluck('id', 'id')->toArray();
+                $updatedSectionIds = [];
+
+                foreach ($requestData['sections'] as $sectionData) {
+                    if (!empty($sectionData['title'])) {
+                        if (isset($sectionData['id']) && in_array($sectionData['id'], $existingSections)) {
+                            // Update existing section
+                            $section = $course->sections()->find($sectionData['id']);
+                            $section->update([
+                                'title' => $sectionData['title'],
+                                'slug' => Str::slug($sectionData['title'])
+                            ]);
+                            $updatedSectionIds[] = $sectionData['id'];
+                        } else {
+                            // Create new section
+                            $newSection = $course->sections()->create([
+                                'title' => $sectionData['title'],
+                                'slug' => Str::slug($sectionData['title'])
+                            ]);
+                            $updatedSectionIds[] = $newSection->id;
+                        }
+                    }
+                }
+
+                // Delete sections that were removed
+                $sectionsToDelete = array_diff($existingSections, $updatedSectionIds);
+                if (!empty($sectionsToDelete)) {
+                    $course->sections()->whereIn('id', $sectionsToDelete)->delete();
+                }
+            } else {
+                // If no sections provided, delete all existing sections
+                $course->sections()->delete();
             }
 
             return redirect()->route('admin.courses.index')->with('success', 'Course updated successfully.');
