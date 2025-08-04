@@ -153,6 +153,19 @@
                                 </tr>
                                 @endif
 
+                                @if($course->sections->count() > 0)
+                                <tr>
+                                    <th scope="row">Course Sections</th>
+                                    <td scope="col">
+                                        <ol class="mb-0">
+                                            @foreach($course->sections as $section)
+                                                <li>{{ $section->title }}</li>
+                                            @endforeach
+                                        </ol>
+                                    </td>
+                                </tr>
+                                @endif
+
                                 @if($course->thumbnail_image)
                                 <tr>
                                     <th scope="row">Thumbnail URL</th>

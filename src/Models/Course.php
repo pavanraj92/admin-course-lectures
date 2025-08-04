@@ -62,7 +62,7 @@ class Course extends Model
             'course_category', 
             'course_id', 
             'category_id'
-        )->withTimestamps();
+        )->using(CourseCategory::class)->withTimestamps();
     }
 
     /**
@@ -75,7 +75,31 @@ class Course extends Model
             'course_tag', 
             'course_id', 
             'tag_id'
-        )->withTimestamps();
+        )->using(CourseTag::class)->withTimestamps();
+    }
+
+    /**
+     * Define relationship with course sections
+     */
+    public function sections()
+    {
+        return $this->hasMany(CourseSection::class);
+    }
+
+    /**
+     * Define relationship with course categories (pivot table access)
+     */
+    public function courseCategories()
+    {
+        return $this->hasMany(CourseCategory::class);
+    }
+
+    /**
+     * Define relationship with course tags (pivot table access)
+     */
+    public function courseTagRelations()
+    {
+        return $this->hasMany(CourseTag::class);
     }
 
     /**

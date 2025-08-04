@@ -47,7 +47,7 @@
                                         @foreach ($levels as $level)
                                             <option value="{{ $level }}"
                                                 {{ app('request')->query('level') == $level ? 'selected' : '' }}>
-                                                {{ $level }}
+                                                {{ ucfirst($level) }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -136,10 +136,10 @@
                                                 <td>
                                                     @php
                                                         $levelBadgeClasses = [
-                                                            'beginner' => 'success',
+                                                            'beginner' => 'dark',
                                                             'intermediate' => 'warning',
-                                                            'advanced' => 'danger',
-                                                            'expert' => 'dark',
+                                                            'advanced' => 'info',
+                                                            'expert' => 'success',
                                                         ];
                                                         $badgeClass = $levelBadgeClasses[$course->level] ?? 'secondary';
                                                     @endphp
