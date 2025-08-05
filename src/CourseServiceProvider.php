@@ -20,6 +20,13 @@ class CourseServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/views'      // Package views as fallback
         ], 'course');
 
+        // Load lecture views
+        $this->loadViewsFrom([
+            base_path('Modules/Courses/resources/views'), // Published module views first
+            resource_path('views/admin/lecture'), // Published views second
+            __DIR__ . '/../resources/views'      // Package views as fallback
+        ], 'lecture');
+
         $this->mergeConfigFrom(__DIR__.'/../config/course.php', 'course.constants');
         
         // Also register module views with a specific namespace for explicit usage

@@ -43,7 +43,7 @@ class CourseManagerController extends Controller
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
             $languages = Course::distinct()->pluck('language')->filter()->toArray();
 
-            return view('course::admin.index', compact('courses', 'statuses', 'levels', 'languages'));
+            return view('course::admin.course.index', compact('courses', 'statuses', 'levels', 'languages'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load courses: ' . $e->getMessage());
         }
@@ -57,7 +57,7 @@ class CourseManagerController extends Controller
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
             $statuses = ['pending', 'approved', 'rejected'];
 
-            return view('course::admin.createOrEdit', compact('categories', 'tags', 'levels', 'statuses'));
+            return view('course::admin.course.createOrEdit', compact('categories', 'tags', 'levels', 'statuses'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load course creation form: ' . $e->getMessage());
         }
@@ -120,7 +120,7 @@ class CourseManagerController extends Controller
     {
         try {
             $course->load(['categories', 'courseTags', 'sections']);
-            return view('course::admin.show', compact('course'));
+            return view('course::admin.course.show', compact('course'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load course: ' . $e->getMessage());
         }
@@ -135,7 +135,7 @@ class CourseManagerController extends Controller
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
             $statuses = ['pending', 'approved', 'rejected'];
 
-            return view('course::admin.createOrEdit', compact('course', 'categories', 'tags', 'levels', 'statuses'));
+            return view('course::admin.course.createOrEdit', compact('course', 'categories', 'tags', 'levels', 'statuses'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load course for editing: ' . $e->getMessage());
         }
