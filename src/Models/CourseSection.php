@@ -66,6 +66,14 @@ class CourseSection extends Model
     }
 
     /**
+     * Get the lectures that belong to the section.
+     */
+    public function lectures()
+    {
+        return $this->hasMany(Lecture::class, 'section_id')->ordered();
+    }
+
+    /**
      * Get the route key for the model.
      */
     public function getRouteKeyName()

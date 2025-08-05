@@ -2,10 +2,10 @@
 
 @section('title', 'Courses Management')
 
-@section('page-title', 'Course Manager')
+@section('page-title', 'Manage Courses')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active" aria-current="page">Course Manager</li>
+    <li class="breadcrumb-item active" aria-current="page">Manage Courses</li>
 @endsection
 
 @section('content')
@@ -96,13 +96,13 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">@sortablelink('title', 'Title', [], ['class' => 'text-dark'])</th>
+                                        <th scope="col">@sortablelink('title', 'Title')</th>
                                         <th scope="col">Categories</th>
-                                        <th scope="col">@sortablelink('level', 'Level', [], ['class' => 'text-dark'])</th>
-                                        <th scope="col">@sortablelink('language', 'Language', [], ['class' => 'text-dark'])</th>
-                                        <th scope="col">@sortablelink('is_highlight', 'Highlighted', [], ['class' => 'text-dark'])</th>
-                                        <th scope="col">@sortablelink('status', 'Status', [], ['class' => 'text-dark'])</th>
-                                        <th scope="col">@sortablelink('created_at', 'Created At', [], ['class' => 'text-dark'])</th>
+                                        <th scope="col">@sortablelink('level', 'Level')</th>
+                                        <th scope="col">@sortablelink('language', 'Language')</th>
+                                        <th scope="col">@sortablelink('is_highlight', 'Highlighted')</th>
+                                        <th scope="col">@sortablelink('status', 'Status')</th>
+                                        <th scope="col">@sortablelink('created_at', 'Created At')</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -215,6 +215,12 @@
                                                             data-method="DELETE"
                                                             class="btn btn-danger btn-sm delete-record"><i
                                                                 class="mdi mdi-delete"></i></a>
+                                                    @endadmincan
+                                                    @admincan('lectures_manager_list')
+                                                        <a href="{{ route('admin.lectures.index', ['course' => $course->id]) }}"
+                                                            data-toggle="tooltip" data-placement="top"
+                                                            title="View Lectures" class="btn btn-info btn-sm"><i
+                                                                class="mdi mdi-book-open"></i></a>
                                                     @endadmincan
                                                 </td>
                                             </tr>

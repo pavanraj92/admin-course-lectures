@@ -163,6 +163,21 @@ class Course extends Model
     }
 
     /**
+     * Get all lectures through sections
+     */
+    public function lectures()
+    {
+        return $this->hasManyThrough(
+            Lecture::class,
+            CourseSection::class,
+            'course_id', // Foreign key on course_sections table
+            'section_id', // Foreign key on lectures table
+            'id', // Local key on courses table
+            'id' // Local key on course_sections table
+        )->ordered();
+    }
+
+    /**
      * Get status display name
      */
     public function getStatusDisplayAttribute()

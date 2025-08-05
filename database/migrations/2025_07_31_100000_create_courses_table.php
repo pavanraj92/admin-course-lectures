@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('max_students')->nullable();            
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
-            $table->enum('level', ['Beginner', 'Intermediate', 'Advanced'])->default('Beginner');
+            $table->enum('level', ['beginner', 'intermediate', 'advanced', 'expert'])->default('beginner');
             $table->boolean('is_highlight')->default(false);
             $table->string('thumbnail_image')->nullable();
             $table->string('promo_video')->nullable();
