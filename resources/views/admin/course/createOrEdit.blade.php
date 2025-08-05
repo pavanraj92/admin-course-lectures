@@ -66,7 +66,7 @@
 
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea name="description" id="description" class="form-control" rows="4"
+                                <textarea name="description" id="description" class="form-control description-editor" rows="4"
                                     placeholder="Enter detailed course description">{{ old('description', $course->description ?? '') }}</textarea>
                                 @error('description')
                                     <div class="text-danger validation-error">{{ $message }}</div>
@@ -85,7 +85,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                           
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Duration (In Weeks) <span class="text-danger">*</span></label>
@@ -129,8 +129,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Start Date</label>
-                                        <input type="date" name="start_date" id="start_date" class="form-control"
-                                            value="{{ old('start_date', isset($course->start_date) ? $course->start_date->format('Y-m-d') : '') }}">
+                                        <input type="text" name="start_date" id="start_date" class="form-control"
+                                            value="{{ old('start_date', isset($course->start_date) ? $course->start_date->format('Y-m-d') : '') }}" autocomplete="off" readonly placeholder="Select Start Date">
                                         @error('start_date')
                                             <div class="text-danger validation-error">{{ $message }}</div>
                                         @enderror
@@ -139,8 +139,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>End Date</label>
-                                        <input type="date" name="end_date" id="end_date" class="form-control"
-                                            value="{{ old('end_date', isset($course->end_date) ? $course->end_date->format('Y-m-d') : '') }}">
+                                        <input type="text" name="end_date" id="end_date" class="form-control"
+                                            value="{{ old('end_date', isset($course->end_date) ? $course->end_date->format('Y-m-d') : '') }}" autocomplete="off" readonly placeholder="Select End Date">
                                         @error('end_date')
                                             <div class="text-danger validation-error">{{ $message }}</div>
                                         @enderror
@@ -152,8 +152,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Thumbnail Image <span class="text-danger">*</span></label>
-                                        <input type="file" name="thumbnail_image" class="form-control" id="imageInput"
-                                            accept="image/*">
+                                        <input type="file" name="thumbnail_image" class="form-control"
+                                            id="imageInput" accept="image/*">
                                         @error('thumbnail_image')
                                             <div class="text-danger validation-error">{{ $message }}</div>
                                         @enderror
@@ -271,35 +271,38 @@
                             <h4 class="card-title d-inline-block">
                                 Course Sections
                             </h4>
-                            <button type="button" class="btn btn-sm btn-primary float-right d-inline-block" id="addSectionBtn">
+                            <button type="button" class="btn btn-sm btn-primary float-right d-inline-block"
+                                id="addSectionBtn">
                                 <i class="mdi mdi-plus"></i> Add Section
                             </button>
                         </div>
                         <!--card body section -->
                         <div class="card-body">
                             <div id="sectionsContainer">
-                                @if(isset($course) && $course->sections->count() > 0)
-                                    @foreach($course->sections as $index => $section)
+                                @if (isset($course) && $course->sections->count() > 0)
+                                    @foreach ($course->sections as $index => $section)
                                         <div class="section-item" data-index="{{ $index }}">
                                             <div class="row">
                                                 <div class="col-md-11">
                                                     <div class="form-group">
                                                         {{-- <label>Section Title</label> --}}
-                                                        <input type="text" name="sections[{{ $index }}][title]" 
-                                                               class="form-control section-title" 
-                                                               value="{{ old('sections.' . $index . '.title', $section->title) }}"
-                                                               placeholder="Enter section title">
-                                                        <input type="hidden" name="sections[{{ $index }}][id]" 
-                                                               value="{{ $section->id }}">
+                                                        <input type="text" name="sections[{{ $index }}][title]"
+                                                            class="form-control section-title"
+                                                            value="{{ old('sections.' . $index . '.title', $section->title) }}"
+                                                            placeholder="Enter section title">
+                                                        <input type="hidden" name="sections[{{ $index }}][id]"
+                                                            value="{{ $section->id }}">
                                                         @error("sections.{$index}.title")
-                                                            <div class="text-danger validation-error">{{ $message }}</div>
+                                                            <div class="text-danger validation-error">{{ $message }}
+                                                            </div>
                                                         @enderror
                                                     </div>
                                                 </div>
                                                 <div class="col-md-1">
                                                     <div class="form-group">
                                                         {{-- <label>&nbsp;</label> --}}
-                                                        <button type="button" class="btn btn-danger btn-sm d-block removeSectionBtn">
+                                                        <button type="button"
+                                                            class="btn btn-danger btn-sm d-block removeSectionBtn">
                                                             <i class="mdi mdi-minus"></i>
                                                         </button>
                                                     </div>
@@ -313,10 +316,10 @@
                                             <div class="col-md-11">
                                                 <div class="form-group">
                                                     {{-- <label>Section Title</label> --}}
-                                                    <input type="text" name="sections[0][title]" 
-                                                           class="form-control section-title" 
-                                                           value="{{ old('sections.0.title') }}"
-                                                           placeholder="Enter section title">
+                                                    <input type="text" name="sections[0][title]"
+                                                        class="form-control section-title"
+                                                        value="{{ old('sections.0.title') }}"
+                                                        placeholder="Enter section title">
                                                     @error('sections.0.title')
                                                         <div class="text-danger validation-error">{{ $message }}</div>
                                                     @enderror
@@ -325,7 +328,8 @@
                                             <div class="col-md-1">
                                                 <div class="form-group">
                                                     {{-- <label>&nbsp;</label> --}}
-                                                    <button type="button" class="btn btn-danger btn-sm d-block removeSectionBtn">
+                                                    <button type="button"
+                                                        class="btn btn-danger btn-sm d-block removeSectionBtn">
                                                         <i class="mdi mdi-minus"></i>
                                                     </button>
                                                 </div>
@@ -334,9 +338,10 @@
                                     </div>
                                 @endif
                             </div>
-                            
+
                             <div class="text-muted small">
-                                <i class="mdi mdi-information"></i> Add sections to organize your course content. Sections help students navigate through the course material.
+                                <i class="mdi mdi-information"></i> Add sections to organize your course content. Sections
+                                help students navigate through the course material.
                                 Example: "Introduction", "New Features", "Basic Foundations", "Advanced Topics", etc.
                             </div>
                         </div>
@@ -374,7 +379,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- end row -->                            
+                            <!-- end row -->
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -419,17 +424,26 @@
 @endsection
 
 @push('styles')
+    <!-- ckeditor CSS -->
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css">
     <!-- Select2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- datepicker CSS jquery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">    
     <!-- Custom CSS for the courses -->
     <link rel="stylesheet" href="{{ asset('backend/custom.css') }}">
-    <style>        
+    <style>
         #addSectionBtn {
             float: right;
             margin-top: -5px;
         }
+
         .card-header h4 {
             margin-bottom: 0;
+        }
+
+        .form-control[readonly] {
+            background-color: #ffffff;            
         }
     </style>
 @endpush
@@ -439,6 +453,52 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <!-- Include the CKEditor script -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+    <!-- jQuery UI for datepicker -->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <!-- Initialize CKEditor -->
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .then(editor => {
+                editor.ui.view.editable.element.style.minHeight = '250px';
+                editor.ui.view.editable.element.style.maxHeight = '250px';
+                editor.ui.view.editable.element.style.overflowY = 'auto'; // optional scroll
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
+    <!-- datepicker initialization -->
+    <script>
+        $(function() {
+            $("#start_date, #end_date").datepicker({
+                dateFormat: 'dd-mm-yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+10",
+                autoclose: true,
+            });
+
+            // end date should be after start date
+            $("#start_date").on("change", function() {
+                var startDate = $(this).datepicker("getDate");
+                if (startDate) {
+                    $("#end_date").datepicker("option", "minDate", startDate);
+                }
+            });
+
+            // when end date is selected, set max date for start date
+            $("#end_date").on("change", function() {
+                var endDate = $(this).datepicker("getDate");
+                if (endDate) {
+                    $("#start_date").datepicker("option", "maxDate", endDate);
+                }
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
@@ -509,10 +569,12 @@
                         min: 1
                     },
                     start_date: {
-                        date: true
+                        date: true,
+                        format: "dd-mm-yy"
                     },
                     end_date: {
-                        date: true
+                        date: true,
+                        format: "dd-mm-yy"
                     },
                     thumbnail_image: {
                         required: function() {
@@ -595,14 +657,20 @@
                 const startDate = $('#start_date').val();
                 const endDate = $('#end_date').val();
 
-                if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
-                    alert('End date must be after start date');
+                if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {                    
+                    toastr.error('End date must be after start date', {
+                        position: 'top-right',
+                        progressBar: true,
+                        closeButton: true,
+                        timeOut: 3000
+                    });
                     $('#end_date').val('');
                 }
             });
 
             // Sections functionality
-            let sectionIndex = {{ isset($course) && $course->sections->count() > 0 ? $course->sections->count() : 1 }};
+            let sectionIndex =
+                {{ isset($course) && $course->sections->count() > 0 ? $course->sections->count() : 1 }};
 
             // Add new section
             $('#addSectionBtn').on('click', function() {
@@ -628,7 +696,7 @@
                         </div>
                     </div>
                 `;
-                
+
                 $('#sectionsContainer').append(sectionHtml);
                 updateSectionLabels();
                 sectionIndex++;
@@ -655,13 +723,13 @@
                 $('.section-item').each(function(index) {
                     // $(this).find('label').first().text('Section Title');
                     $(this).attr('data-index', index);
-                    
+
                     // Update input names
                     const titleInput = $(this).find('.section-title');
                     const currentName = titleInput.attr('name');
                     const newName = currentName.replace(/sections\[\d+\]/, `sections[${index}]`);
                     titleInput.attr('name', newName);
-                    
+
                     // Update hidden ID input if exists
                     const hiddenInput = $(this).find('input[type="hidden"]');
                     if (hiddenInput.length) {

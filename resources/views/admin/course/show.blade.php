@@ -12,7 +12,7 @@
 @section('content')
     <!-- Container fluid  -->
     <div class="container-fluid">
-        <!-- Start Course Content -->
+        <!-- Start Course Content section -->
         <div class="row">
             <div class="col-12">
                 <div class="card">

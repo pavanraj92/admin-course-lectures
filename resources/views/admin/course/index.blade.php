@@ -83,6 +83,7 @@
                 <div class="card">
                     <div class="card-body">
                         @admincan('courses_manager_create')
+                            <!--create course button -->
                             <div class="text-right">
                                 <a href="{{ route('admin.courses.create') }}" class="btn btn-primary mb-3">
                                     <i class="mdi mdi-plus"></i> Create New Course
