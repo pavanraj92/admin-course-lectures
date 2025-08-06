@@ -19,7 +19,7 @@ class LectureManagerController extends Controller
     public function __construct(ImageService $imageService)
     {
         $this->imageService = $imageService;
-        $this->middleware('admincan_permission:lectures_manager_list')->only(['index','list']);
+        $this->middleware('admincan_permission:lectures_manager_list')->only(['index', 'list']);
         $this->middleware('admincan_permission:lectures_manager_create')->only(['create', 'store']);
         $this->middleware('admincan_permission:lectures_manager_edit')->only(['edit', 'update']);
         $this->middleware('admincan_permission:lectures_manager_view')->only(['show']);
@@ -276,27 +276,6 @@ class LectureManagerController extends Controller
             return response()->json(['success' => true, 'message' => 'Highlight status updated to ' . $label, 'strHtml' => $strHtml]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update highlight status.', 'error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function list(Request $request)
-    {
-        try {
-            $lectures = Lecture::with(['section', 'section.course'])
-                ->filter($request->query('keyword'))
-                ->filterByStatus($request->query('status'))
-                ->filterByType($request->query('type'))
-                ->orderBy('created_at', 'desc')
-                ->paginate(Lecture::getPerPageLimit())
-                ->withQueryString();
-
-            // Get available statuses and types for filter dropdowns
-            $statuses = ['draft', 'published', 'archived'];
-            $types = ['video', 'text', 'quiz', 'assignment'];
-
-            return view('course::admin.lecture.listIndex', compact('lectures', 'statuses', 'types'));
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to load lecture list: ' . $e->getMessage());
         }
     }
 }
