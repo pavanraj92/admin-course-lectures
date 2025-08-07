@@ -18,12 +18,12 @@ class Lecture extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
+        'course_id',
         'section_id',
         'title',
         'slug',
         'short_description',
-        'description',
-        'content',
+        'description',        
         'type',
         'video',
         'attachment',
@@ -261,8 +261,7 @@ class Lecture extends Model
         return match ($this->type) {
             'video' => 'badge-primary',
             'audio' => 'badge-info',
-            'text' => 'badge-secondary',
-            'quiz' => 'badge-warning',
+            'text' => 'badge-secondary',            
             default => 'badge-light'
         };
     }

@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('lectures', function (Blueprint $table) {
-            $table->id();
+            $table->id();            
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
             $table->foreignId('section_id')->constrained('course_sections')->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
-            $table->text('description')->nullable();
-            $table->longText('content')->nullable();
+            $table->text('short_description')->nullable();            
+            $table->text('description')->nullable();            
             $table->enum('type', ['video', 'audio', 'text', 'quiz'])->default('video');
             $table->string('video')->nullable(); // Path to video file
             $table->string('attachment')->nullable(); // Path to attachment file
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->softDeletes();
 
             // Add indexes for better performance
+            $table->index('course_id');
             $table->index(['section_id', 'order']);
             $table->index(['section_id', 'status']);
             $table->index('slug');

@@ -56,8 +56,9 @@ class CourseManagerController extends Controller
             $tags = Tag::all();
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
             $statuses = ['pending', 'approved', 'rejected'];
+            $languages = ['english', 'spanish', 'french', 'german', 'chinese', 'japanese', 'russian', 'arabic'];
 
-            return view('course::admin.course.createOrEdit', compact('categories', 'tags', 'levels', 'statuses'));
+            return view('course::admin.course.createOrEdit', compact('categories', 'tags', 'levels', 'statuses', 'languages'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load course creation form: ' . $e->getMessage());
         }
@@ -134,8 +135,9 @@ class CourseManagerController extends Controller
             $tags = Tag::all();
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
             $statuses = ['pending', 'approved', 'rejected'];
+            $languages = ['english', 'spanish', 'french', 'german', 'chinese', 'japanese', 'russian', 'arabic'];
 
-            return view('course::admin.course.createOrEdit', compact('course', 'categories', 'tags', 'levels', 'statuses'));
+            return view('course::admin.course.createOrEdit', compact('course', 'categories', 'tags', 'levels', 'statuses', 'languages'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load course for editing: ' . $e->getMessage());
         }

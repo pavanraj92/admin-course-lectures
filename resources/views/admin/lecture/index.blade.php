@@ -104,18 +104,14 @@
                                             class="text-muted">{{ Str::limit($lecture->short_description, 50) }}</small>
                                         @endif
                                     </td>
-                                    <td>
-                                        @if($lecture->section && $lecture->section->course)
+                                    <td>                                       
                                         <div>
-                                            <strong>{{ $lecture->section->course->title }}</strong>
+                                            <strong>{{ $lecture?->course?->title ?? 'No Course Assigned' }}</strong>
                                             <br>
                                             <small class="text-muted">
-                                                <i class="mdi mdi-folder"></i> {{ $lecture->section->title }}
+                                                <i class="mdi mdi-folder"></i> {{ $lecture?->section?->title ?? 'No Section Assigned' }}
                                             </small>
-                                        </div>
-                                        @else
-                                        <span class="text-muted">No course/section assigned</span>
-                                        @endif
+                                        </div>                                        
                                     </td>
                                     <td>
                                         <span class="badge badge-info">{{ ucfirst($lecture->type) }}</span>

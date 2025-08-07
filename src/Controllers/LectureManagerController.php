@@ -8,9 +8,9 @@ use admin\courses\Requests\LectureCreateRequest;
 use admin\courses\Requests\LectureUpdateRequest;
 use admin\courses\Models\Lecture;
 use admin\courses\Models\Course;
-use admin\courses\Models\CourseSection as Section;
 use Illuminate\Support\Str;
 use admin\admin_auth\Services\ImageService;
+use admin\courses\Models\CourseSection;
 
 class LectureManagerController extends Controller
 {
@@ -50,7 +50,7 @@ class LectureManagerController extends Controller
                 ->withQueryString();
 
             $statuses = ['draft', 'published', 'archived'];
-            $types = ['video', 'audio', 'text', 'quiz'];
+            $types = ['video', 'audio', 'text'];
 
             // Get course info if filtering by course
             $course = $courseId ? Course::find($courseId) : null;
@@ -64,11 +64,15 @@ class LectureManagerController extends Controller
     public function create()
     {
         try {
-            $sections = Section::all();
-            $types = ['video', 'audio', 'text', 'quiz'];
+            //fetch query string for sections
+            $courseId = request()->query('course');
+            $sections = CourseSection::where('course_id', $courseId)->pluck('title', 'id')->toArray();
+            //pluck courses data
+            $courses = Course::where('status', 'approved')->pluck('title', 'id')->toArray();           
+            $types = ['video', 'audio', 'text'];
             $statuses = ['draft', 'published', 'archived'];
 
-            return view('course::admin.lecture.createOrEdit', compact('sections', 'types', 'statuses'));
+            return view('course::admin.lecture.createOrEdit', compact('sections', 'courses', 'types', 'statuses'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load lecture creation form: ' . $e->getMessage());
         }
@@ -140,13 +144,17 @@ class LectureManagerController extends Controller
 
     public function edit(Lecture $lecture)
     {
-        try {
+        try {           
             $lecture->load(['section']);
-            $sections = Section::all();
-            $types = ['video', 'audio', 'text', 'quiz'];
+            //pluck courses data
+            $courses = Course::where('status', 'approved')->pluck('title', 'id')->toArray();           
+            //fetch query string for sections
+            $courseId = request()->query('course');
+            $sections = CourseSection::where('course_id', $courseId)->pluck('title', 'id')->toArray();
+            $types = ['video', 'audio', 'text'];
             $statuses = ['draft', 'published', 'archived'];
 
-            return view('course::admin.lecture.createOrEdit', compact('lecture', 'sections', 'types', 'statuses'));
+            return view('course::admin.lecture.createOrEdit', compact('lecture', 'courses', 'sections', 'types', 'statuses'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load lecture for editing: ' . $e->getMessage());
         }
@@ -277,5 +285,16 @@ class LectureManagerController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update highlight status.', 'error' => $e->getMessage()], 500);
         }
+    }
+        /**
+     * Fetch sections for a given course (AJAX).
+     */
+    public function fetchCourseSections($courseId)
+    {        
+        $sections = CourseSection::where('course_id', $courseId)
+            ->select('id', 'title')
+            ->orderBy('id', 'asc')
+            ->get();
+        return response()->json(['sections' => $sections]);
     }
 }
