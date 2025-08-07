@@ -20,13 +20,13 @@ class LectureCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'course_id' => 'required|exists:courses,id',
             'section_id' => 'required|exists:course_sections,id',
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:500',
-            'description' => 'nullable|string',
-            'content' => 'nullable|string',
+            'description' => 'nullable|string',            
             'type' => 'required|in:video,audio,text,quiz',
-            'video' => 'nullable',
+            'video' => 'required|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
             'attachment' => 'nullable|file|mimes:jpg,pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar|max:51200', // 50MB max
             'duration' => 'nullable|integer|min:1',
             'order' => 'nullable|integer|min:0',

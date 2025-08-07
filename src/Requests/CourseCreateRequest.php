@@ -24,24 +24,28 @@ class CourseCreateRequest extends FormRequest
             'slug' => 'nullable|string|max:255|unique:courses,slug',
             'short_description' => 'nullable|string|max:500',
             'description' => 'nullable|string',
-            'language' => 'nullable|string|max:100',
+            'language' => 'required',
             'level' => 'required|in:beginner,intermediate,advanced,expert',
-            'duration' => 'nullable|string|max:100',
-            'price' => 'nullable|numeric|min:0',
-            'max_students' => 'nullable|integer|min:1',
+            'duration' => 'required|numeric|max:365',
+            'price' => 'required|numeric|min:0',
+            'max_students' => 'required|integer|min:1',
             'instructor' => 'nullable|string|max:255',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'is_highlight' => 'boolean',
-            'status' => 'required|in:pending,approved,rejected',
-            'thumbnail_url' => 'nullable|string|max:500',
+            'status' => 'required|in:pending,approved,rejected',            
             
+           //thumbnail_image image laravel validation
+            //'thumbnail_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120', // 5MB max
+
             // Fix the promo_video validation - remove 'video' rule
-            'promo_video_url' => 'nullable|string|max:500',
-            'promo_video_file' => 'nullable|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
-            
-            'categories' => 'nullable|array',
+            //'promo_video' => 'required|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
+
+            //categories validation
+            'categories' => 'required|array',
             'categories.*' => 'exists:categories,id',
+
+            // course_tags validation
             'course_tags' => 'nullable|array',
             'course_tags.*' => 'exists:tags,id',
             
@@ -58,25 +62,27 @@ class CourseCreateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Course title is required.',
-            'title.max' => 'Course title must not exceed 255 characters.',
-            'slug.unique' => 'This slug is already taken.',
-            'level.required' => 'Course level is required.',
-            'level.in' => 'Course level must be Beginner, Intermediate, Advanced, or Expert.',
-            'status.required' => 'Course status is required.',
-            'status.in' => 'Course status must be pending, approved, or rejected.',
-            'price.numeric' => 'Price must be a valid number.',
-            'price.min' => 'Price cannot be negative.',
-            'max_students.integer' => 'Maximum students must be a whole number.',
-            'max_students.min' => 'Maximum students must be at least 1.',
-            'end_date.after_or_equal' => 'End date must be after or equal to start date.',
-            'promo_video_file.file' => 'Promo video must be a valid file.',
-            'promo_video_file.mimes' => 'Promo video must be a video file (mp4, avi, mov, wmv, flv, webm).',
-            'promo_video_file.max' => 'Promo video file size must not exceed 100MB.',
-            'categories.array' => 'Categories must be an array.',
-            'categories.*.exists' => 'Selected category does not exist.',
-            'course_tags.array' => 'Tags must be an array.',
-            'course_tags.*.exists' => 'Selected tag does not exist.',
+            'title.required' => 'The course title is required.',
+            'title.max' => 'The course title must not exceed 255 characters.',
+            'slug.unique' => 'The slug is already taken.',
+            'level.required' => 'The course level is required.',
+            'level.in' => 'The course level must be Beginner, Intermediate, Advanced, or Expert.',
+            'status.required' => 'The course status is required.',
+            'status.in' => 'The course status must be pending, approved, or rejected.',
+            'price.numeric' => 'The price must be a valid number.',
+            'price.min' => 'The price cannot be negative.',
+            'max_students.integer' => 'The maximum students must be a whole number.',
+            'max_students.min' => 'The maximum students must be at least 1.',
+            'end_date.after_or_equal' => 'The end date must be after or equal to the start date.',
+            'promo_video_file.file' => 'The promo video must be a valid file.',
+            'promo_video_file.mimes' => 'The promo video must be a video file (mp4, avi, mov, wmv, flv, webm).',
+            'promo_video_file.max' => 'The promo video file size must not exceed 100MB.',
+            'categories.array' => 'The categories must be an array.',
+            'categories.*.exists' => 'The selected category does not exist.',
+            'course_tags.array' => 'The tags must be an array.',
+            'course_tags.*.exists' => 'The selected tag does not exist.',
+            'sections.array' => 'The sections must be an array.',
+            'sections.*.title.required' => 'The section title is required.',
         ];
     }
 }

@@ -77,9 +77,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Language <span class="text-danger">*</span></label>
-                                        <input type="text" name="language" id="language" class="form-control"
-                                            value="{{ old('language', $course->language ?? 'English') }}"
-                                            placeholder="Enter language" required>
+                                        <!--select2 drop down for the languages-->
+                                        <select name="language" id="language" class="form-control select2" required>
+                                            @foreach($languages as $lang)
+                                                <option value="{{ $lang }}" {{ old('language', $course->language ?? 'English') == $lang ? 'selected' : '' }}>
+                                                    {{ Str::ucfirst($lang) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                         @error('language')
                                             <div class="text-danger validation-error">{{ $message }}</div>
                                         @enderror
@@ -130,7 +135,8 @@
                                     <div class="form-group">
                                         <label>Start Date</label>
                                         <input type="text" name="start_date" id="start_date" class="form-control"
-                                            value="{{ old('start_date', isset($course->start_date) ? $course->start_date->format('Y-m-d') : '') }}" autocomplete="off" readonly placeholder="Select Start Date">
+                                            value="{{ old('start_date', isset($course->start_date) ? $course->start_date->format('Y-m-d') : '') }}"
+                                            autocomplete="off" readonly placeholder="Select Start Date">
                                         @error('start_date')
                                             <div class="text-danger validation-error">{{ $message }}</div>
                                         @enderror
@@ -140,7 +146,8 @@
                                     <div class="form-group">
                                         <label>End Date</label>
                                         <input type="text" name="end_date" id="end_date" class="form-control"
-                                            value="{{ old('end_date', isset($course->end_date) ? $course->end_date->format('Y-m-d') : '') }}" autocomplete="off" readonly placeholder="Select End Date">
+                                            value="{{ old('end_date', isset($course->end_date) ? $course->end_date->format('Y-m-d') : '') }}"
+                                            autocomplete="off" readonly placeholder="Select End Date">
                                         @error('end_date')
                                             <div class="text-danger validation-error">{{ $message }}</div>
                                         @enderror
@@ -163,7 +170,10 @@
                                     <div id="imagePreview">
                                         @if (isset($course) && $course->thumbnail_image)
                                             <img src="{{ asset('storage/' . $course->thumbnail_image) }}"
-                                                alt="Course Image" class="w-100">
+                                                alt="Course Image" class="thumbnail w-100">
+                                        @else
+                                            <img src="{{ asset('images/noimage.png') }}"
+                                                alt="Default Course Image" class="w-100 h-50">
                                         @endif
                                     </div>
                                 </div>
@@ -182,9 +192,11 @@
                                         @if (isset($course) && $course->promo_video)
                                             <video controls class="w-100">
                                                 <source src="{{ asset('storage/' . $course->promo_video) }}"
-                                                    type="video/mp4">
-                                                Your browser does not support the video tag.
+                                                    type="video/mp4">Your browser does not support the video tag.
                                             </video>
+                                        @else                                            
+                                            <img src="{{ asset('images/novideo.png') }}"
+                                                alt="Default Course Image" class="w-50">
                                         @endif
                                     </div>
                                 </div>
@@ -349,8 +361,6 @@
                     </div>
                     <!--card section -->
 
-
-                    <!-- card section -->
                     <div class="card bg-white">
                         <!--card header section -->
                         <div class="card-header bg-white border-bottom border-gray-200">
@@ -406,7 +416,8 @@
                                             <input type="checkbox" name="is_highlight" id="is_highlight"
                                                 class="custom-control-input" value="1"
                                                 {{ old('is_highlight', $course->is_highlight ?? false) ? 'checked' : '' }}>
-                                            <label class="custom-control-label" for="is_highlight">Featured Course</label>
+                                            <label class="custom-control-label" for="is_highlight">Featured
+                                                Course</label>
                                         </div>
                                     </div>
                                 </div>
@@ -430,21 +441,17 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- datepicker CSS jquery UI -->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">    
-    <!-- Custom CSS for the courses -->
-    <link rel="stylesheet" href="{{ asset('backend/custom.css') }}">
     <style>
         #addSectionBtn {
             float: right;
             margin-top: -5px;
         }
-
         .card-header h4 {
             margin-bottom: 0;
         }
-
         .form-control[readonly] {
-            background-color: #ffffff;            
-        }
+            background-color: #ffffff;
+        }     
     </style>
 @endpush
 
@@ -457,48 +464,6 @@
     <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
     <!-- jQuery UI for datepicker -->
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <!-- Initialize CKEditor -->
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#description'))
-            .then(editor => {
-                editor.ui.view.editable.element.style.minHeight = '250px';
-                editor.ui.view.editable.element.style.maxHeight = '250px';
-                editor.ui.view.editable.element.style.overflowY = 'auto'; // optional scroll
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
-
-    <!-- datepicker initialization -->
-    <script>
-        $(function() {
-            $("#start_date, #end_date").datepicker({
-                dateFormat: 'dd-mm-yy',
-                changeMonth: true,
-                changeYear: true,
-                yearRange: "-100:+10",
-                autoclose: true,
-            });
-
-            // end date should be after start date
-            $("#start_date").on("change", function() {
-                var startDate = $(this).datepicker("getDate");
-                if (startDate) {
-                    $("#end_date").datepicker("option", "minDate", startDate);
-                }
-            });
-
-            // when end date is selected, set max date for start date
-            $("#end_date").on("change", function() {
-                var endDate = $(this).datepicker("getDate");
-                if (endDate) {
-                    $("#start_date").datepicker("option", "maxDate", endDate);
-                }
-            });
-        });
-    </script>
 
     <script>
         $(document).ready(function() {
@@ -520,21 +485,7 @@
                 }
             });
 
-            // Image preview functionality
-            $('#imageInput').on('change', function(event) {
-                const input = event.target;
-                const preview = $('#imagePreview');
-                preview.empty(); // Remove old image
-
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.html('<img src="' + e.target.result +
-                            '" style="max-width:200px; max-height:120px;" alt="Course Preview" />');
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            });
+            // Remove old image input logic (Dropzone now handles preview)
 
             // jQuery validation for the form
             $('#courseForm').validate({
@@ -551,8 +502,7 @@
                         required: true
                     },
                     language: {
-                        required: true,
-                        minlength: 2
+                        required: true                      
                     },
                     duration: {
                         required: true,
@@ -569,25 +519,22 @@
                         min: 1
                     },
                     start_date: {
-                        date: true,
-                        format: "dd-mm-yy"
+                        date: true,                        
                     },
                     end_date: {
                         date: true,
-                        format: "dd-mm-yy"
+                        
                     },
-                    thumbnail_image: {
-                        required: function() {
-                            return {{ isset($course) ? 'false' : 'true' }};
-                        },
-                        //extension: "jpg,jpeg,png"
-                    },
-                    promo_video: {
-                        required: function() {
-                            return {{ isset($course) ? 'false' : 'true' }};
-                        },
-                        //extension: "mp4,mov,avi,wmv"
-                    },
+                    // thumbnail_image: {
+                    //     required: function() {
+                    //         return $('input[name="thumbnail_image"]').val() === '' && $('#imagePreview img.thumbnail').length === 0;
+                    //     }
+                    // },
+                    // promo_video: {
+                    //     required: function() {
+                    //         return $('input[name="promo_video"]').val() === '' && $('#videoPreview video').length === 0;
+                    //     }
+                    // },
                     'categories[]': {
                         required: true,
                         minlength: 1
@@ -613,10 +560,12 @@
                         minlength: "Duration must be at least 1 week"
                     },
                     price: {
+                        required: "Please enter a price",
                         number: "Please enter a valid price",
                         min: "Price cannot be negative"
                     },
                     max_students: {
+                        required: "Please enter the maximum number of students",
                         digits: "Max students must be a valid number",
                         min: "Max students must be at least 1"
                     },
@@ -627,14 +576,12 @@
                         date: "Please enter a valid end date"
                     },
                     thumbnail_image: {
-                        required: "Please upload a thumbnail image",
-                        extension: "Only jpg, jpeg, and png formats are allowed"
+                        required: "Please upload a thumbnail image"
                     },
                     promo_video: {
-                        required: "Please upload a promo video",
-                        extension: "Only mp4, mov, avi, and wmv formats are allowed"
+                        required: "Please upload a promo video"
                     },
-                    categories: {
+                    'categories[]': {
                         required: "Please select at least one category"
                     }
                 },
@@ -648,7 +595,27 @@
                 errorClass: 'text-danger custom-error',
                 errorPlacement: function(error, element) {
                     $('.validation-error').hide(); // hide blade errors
-                    error.insertAfter(element);
+                    if (element.hasClass('select2-hidden-accessible')) {
+                        error.insertAfter(element.next('.select2')); // place error after select2 container
+                    } else {
+                        error.insertAfter(element);
+                    }
+                }
+            });
+
+             // Image preview functionality
+            $('#imageInput').on('change', function(event) {
+                const input = event.target;
+                const preview = $('#imagePreview');
+                preview.empty(); // Remove old image
+
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.html('<img src="' + e.target.result +
+                            '" style="max-width:200px; max-height:120px;" alt="Course Preview" />');
+                    }
+                    reader.readAsDataURL(input.files[0]);
                 }
             });
 
@@ -657,7 +624,7 @@
                 const startDate = $('#start_date').val();
                 const endDate = $('#end_date').val();
 
-                if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {                    
+                if (startDate && endDate && new Date(endDate) <= new Date(startDate)) {
                     toastr.error('End date must be after start date', {
                         position: 'top-right',
                         progressBar: true,
@@ -740,5 +707,59 @@
                 });
             }
         });
+    </script>
+    <!-- datepicker initialization -->
+    <script>
+        $(function() {
+            $("#start_date, #end_date").datepicker({
+                dateFormat: 'dd-mm-yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+10",
+                autoclose: true,
+            });
+
+            // end date should be after start date
+            $("#start_date").on("change", function() {
+                var startDate = $(this).datepicker("getDate");
+                if (startDate) {
+                    $("#end_date").datepicker("option", "minDate", startDate);
+                }
+            });
+
+            // when end date is selected, set max date for start date
+            $("#end_date").on("change", function() {
+                var endDate = $(this).datepicker("getDate");
+                if (endDate) {
+                    $("#start_date").datepicker("option", "maxDate", endDate);
+                }
+            });
+        });
+    </script>
+    <!-- Initialize CKEditor -->
+    <script>
+        //initialize CKEditor for the short description field
+        ClassicEditor
+            .create(document.querySelector('#short_description'))
+            .then(editor => {
+                editor.ui.view.editable.element.style.minHeight = '100px';
+                editor.ui.view.editable.element.style.maxHeight = '100px';
+                editor.ui.view.editable.element.style.overflowY = 'auto'; // optional scroll
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        // Initialize CKEditor for the description field
+        ClassicEditor
+            .create(document.querySelector('#description'))
+            .then(editor => {
+                editor.ui.view.editable.element.style.minHeight = '250px';
+                editor.ui.view.editable.element.style.maxHeight = '250px';
+                editor.ui.view.editable.element.style.overflowY = 'auto'; // optional scroll
+            })
+            .catch(error => {
+                console.error(error);
+            });
     </script>
 @endpush

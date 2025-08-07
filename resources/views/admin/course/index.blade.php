@@ -96,13 +96,13 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">@sortablelink('title', 'Title')</th>
+                                        <th scope="col">@sortablelink('title', 'Title', '', ['class' => 'text-dark'])</th>
                                         <th scope="col">Categories</th>
-                                        <th scope="col">@sortablelink('level', 'Level')</th>
-                                        <th scope="col">@sortablelink('language', 'Language')</th>
-                                        <th scope="col">@sortablelink('is_highlight', 'Highlighted')</th>
-                                        <th scope="col">@sortablelink('status', 'Status')</th>
-                                        <th scope="col">@sortablelink('created_at', 'Created At')</th>
+                                        <th scope="col">@sortablelink('level', 'Level', '', ['class' => 'text-dark'])</th>
+                                        <th scope="col">@sortablelink('language', 'Language', '', ['class' => 'text-dark'])</th>
+                                        <th scope="col">@sortablelink('is_highlight', 'Highlighted', '', ['class' => 'text-dark'])</th>
+                                        <th scope="col">@sortablelink('status', 'Status', '', ['class' => 'text-dark'])</th>
+                                        <th scope="col">@sortablelink('created_at', 'Created At', '', ['class' => 'text-dark'])</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>

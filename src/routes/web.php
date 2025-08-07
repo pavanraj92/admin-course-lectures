@@ -5,6 +5,7 @@ use admin\courses\Controllers\CourseManagerController;
 use admin\courses\Controllers\LectureManagerController;
 
 Route::name('admin.')->middleware(['web','admin.auth'])->group(function () {  
+    
     Route::resource('courses', CourseManagerController::class);
     Route::post('courses/updateStatus', [CourseManagerController::class, 'updateStatus'])->name('courses.updateStatus');
     Route::post('courses/updateHighlight', [CourseManagerController::class, 'updateHighlight'])->name('courses.updateHighlight');
@@ -15,4 +16,6 @@ Route::name('admin.')->middleware(['web','admin.auth'])->group(function () {
     
     // Resource route for lectures (this handles index, create, store, show, edit, update, destroy)
     Route::resource('lectures', LectureManagerController::class);
+    // Custom route to fetch sections for a course
+    Route::get('fetch/course/section/{course}', [LectureManagerController::class, 'fetchCourseSections'])->name('courses.sections');
 });
