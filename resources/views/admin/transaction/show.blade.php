@@ -1,0 +1,138 @@
+@extends('admin::admin.layouts.master')
+
+@section('title', 'View Transaction - ' . ($transaction->transaction_reference ?? 'N/A'))
+@section('page-title', 'Transaction Details')
+
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('admin.transactions.index') }}">Transactions</a></li>
+<li class="breadcrumb-item active" aria-current="page">{{ $transaction->transaction_reference ?? 'N/A' }}</li>
+@endsection
+
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h4 class="card-title mb-0">
+                            Transaction #{{ $transaction->transaction_reference ?? '—' }}
+                        </h4>
+                        <a href="{{ route('admin.transactions.index') }}" class="btn btn-secondary ml-2">
+                            <i class="mdi mdi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+
+                    <div class="row">
+                        <!-- Left Column: Transaction Information -->
+                        <div class="col-md-8">
+                            <div class="card mb-3">
+                                <div class="card-header bg-primary">
+                                    <h5 class="mb-0 text-white font-bold">Transaction Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">Reference:</label>
+                                                <p>{{ $transaction->transaction_reference ?? '—' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">Payment Gateway:</label>
+                                                <p>{{ ucfirst($transaction->payment_gateway) }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">Amount:</label>
+                                                <p>{{ number_format($transaction->amount, 2) }} {{ $transaction->currency }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">Status:</label>
+                                                @php
+                                                $statusColors = [
+                                                'pending' => 'badge-warning',
+                                                'success' => 'badge-success',
+                                                'failed' => 'badge-danger',
+                                                ];
+                                                $color = $statusColors[$transaction->status] ?? 'badge-secondary';
+                                                @endphp
+                                                <p><span class="badge {{ $color }}">{{ ucfirst($transaction->status) }}</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">Date:</label>
+                                                <p>{{ $transaction->created_at ? $transaction->created_at->format('F d, Y g:i A') : '—' }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">User:</label>
+                                                @if($transaction->user)
+                                                <p>
+                                                    {{ $transaction->user->name }} <br>
+                                                    <small class="text-muted">{{ $transaction->user->email }}</small>
+                                                </p>
+                                                @else
+                                                <p>—</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Metadata -->
+                            <div class="card">
+                                <div class="card-header bg-primary">
+                                    <h5 class="mb-0 text-white font-bold">Metadata</h5>
+                                </div>
+                                <div class="card-body">
+                                    @if (!empty($transaction->metadata) && is_array($transaction->metadata))
+                                    <ul class="list-group">
+                                        @foreach ($transaction->metadata as $key => $value)
+                                        <li class="list-group-item">
+                                            <strong>{{ ucfirst($key) }}:</strong>
+                                            {{ is_array($value) ? json_encode($value) : $value }}
+                                        </li>
+                                        @endforeach
+                                    </ul>
+                                    @else
+                                    <p class="text-muted">No additional metadata</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Actions & Info -->
+                        <div class="col-md-4">                            
+                            <div class="card">
+                                <div class="card-header bg-primary">
+                                    <h5 class="mb-0 text-white font-bold">Additional Info</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Created:</strong> {{ $transaction->created_at->format('M d, Y g:i A') }}</p>
+                                    <p><strong>Last Updated:</strong> {{ $transaction->updated_at->format('M d, Y g:i A') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- /.row -->
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@endsection

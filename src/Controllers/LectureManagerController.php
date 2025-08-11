@@ -4,8 +4,8 @@ namespace admin\courses\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use admin\courses\Requests\LectureCreateRequest;
-use admin\courses\Requests\LectureUpdateRequest;
+use admin\courses\Requests\Lecture\LectureCreateRequest;
+use admin\courses\Requests\Lecture\LectureUpdateRequest;
 use admin\courses\Models\Lecture;
 use admin\courses\Models\Course;
 use Illuminate\Support\Str;
