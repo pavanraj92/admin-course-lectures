@@ -5,7 +5,6 @@
 @section('page-title', 'Transaction Manager')
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.transactions.index') }}">Transaction Manager</a></li>
 <li class="breadcrumb-item active" aria-current="page">Transaction Manager</li>
 @endsection
 

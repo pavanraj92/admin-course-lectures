@@ -2,10 +2,10 @@
 
 @section('title', 'Lectures Management')
 
-@section('page-title', 'Manage Lectures')
+@section('page-title', 'Lecture Manager')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">Manage Lectures</li>
+<li class="breadcrumb-item active" aria-current="page">Lecture Manager</li>
 @endsection
 
 @section('content')
@@ -71,7 +71,7 @@
                     @admincan('lectures_manager_create')
                     <div class="text-right">
                         <a href="{{ route('admin.lectures.create', ['course' => request('course')]) }}" class="btn btn-primary mb-3">
-                            <i class="mdi mdi-plus"></i> Create New Lecture
+                            Create New Lecture
                         </a>
                     </div>
                     @endadmincan
@@ -80,7 +80,7 @@
                         <table class="table">
                             <thead class="thead-light">
                                 <tr>
-                                    <th scope="col">#</th>
+                                    <th scope="col">S. No.</th>
                                     <th scope="col">@sortablelink('title', 'Title', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
                                     <th scope="col">Course/Section</th>
                                     <th scope="col">@sortablelink('type', 'Type', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
@@ -104,14 +104,14 @@
                                             class="text-muted">{{ Str::limit($lecture->short_description, 50) }}</small>
                                         @endif
                                     </td>
-                                    <td>                                       
+                                    <td>
                                         <div>
                                             <strong>{{ $lecture?->course?->title ?? 'No Course Assigned' }}</strong>
                                             <br>
                                             <small class="text-muted">
                                                 <i class="mdi mdi-folder"></i> {{ $lecture?->section?->title ?? 'No Section Assigned' }}
                                             </small>
-                                        </div>                                        
+                                        </div>
                                     </td>
                                     <td>
                                         <span class="badge badge-info">{{ ucfirst($lecture->type) }}</span>

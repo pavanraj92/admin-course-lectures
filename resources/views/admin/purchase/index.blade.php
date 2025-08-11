@@ -1,11 +1,10 @@
 @extends('admin::admin.layouts.master')
 
-@section('title', 'Course Purchases Manager')
-@section('page-title', 'Course Purchases Manager')
+@section('title', 'Purchase Manager')
+@section('page-title', 'Purchase Manager')
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.course-purchases.index') }}">Course Purchases Manager</a></li>
-<li class="breadcrumb-item active" aria-current="page">Course Purchases</li>
+<li class="breadcrumb-item active" aria-current="page">Purchase Manager</li>
 @endsection
 
 @section('content')
@@ -24,7 +23,7 @@
                                     value="{{ request('keyword') }}" placeholder="Search by user or course">
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control select2">

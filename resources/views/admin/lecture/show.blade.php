@@ -5,8 +5,8 @@
 @section('page-title', 'Lecture Details')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('admin.lectures.index') }}">Lectures</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{ $lecture->title }}</li>
+    <li class="breadcrumb-item"><a href="{{ route('admin.lectures.index') }}">Lecture Manager</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Lecture Details</li>
 @endsection
 
 @section('content')
@@ -18,12 +18,7 @@
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <h4 class="card-title mb-0">{{ $lecture->title }}</h4>
                             <div>
-                                <a href="{{ route('admin.lectures.edit', $lecture) }}" class="btn btn-warning">
-                                    <i class="fa fa-edit"></i> Edit
-                                </a>
-                                <a href="{{ route('admin.lectures.index') }}" class="btn btn-secondary ml-2">
-                                    <i class="fa fa-arrow-left"></i> Back to List
-                                </a>
+                                <a href="{{ route('admin.lectures.index') }}" class="btn btn-secondary ml-2">Back</a>
                             </div>
                         </div>
 
@@ -167,12 +162,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <!-- Action Buttons -->
-                        <div class="mt-1">
-                            <a href="{{ route('admin.lectures.index') }}" class="btn btn-secondary">
-                                <i class="mdi mdi-arrow-left"></i> Back
-                            </a>
                         </div>
                     </div>
                     <!-- End card body -->

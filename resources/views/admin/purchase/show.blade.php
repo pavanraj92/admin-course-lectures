@@ -5,7 +5,7 @@
 
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="{{ route('admin.course-purchases.index') }}">Course Purchases</a></li>
-<li class="breadcrumb-item active" aria-current="page">Purchase #{{ $purchase->id }}</li>
+<li class="breadcrumb-item active" aria-current="page">Purchase Details</li>
 @endsection
 
 @section('content')
@@ -20,8 +20,7 @@
                         <h4 class="card-title mb-0">
                             Purchase #{{ $purchase->id }}
                         </h4>
-                        <a href="{{ route('admin.course-purchases.index') }}" class="btn btn-secondary ml-2">
-                            <i class="mdi mdi-arrow-left"></i> Back to List
+                        <a href="{{ route('admin.course-purchases.index') }}" class="btn btn-secondary ml-2">Back
                         </a>
                     </div>
 

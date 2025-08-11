@@ -19,11 +19,8 @@
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <h4 class="card-title mb-0">{{ $course->title }}</h4>
                             <div>
-                                <a href="{{ route('admin.courses.edit', $course) }}" class="btn btn-warning">
-                                    <i class="fa fa-edit"></i> Edit
-                                </a>
                                 <a href="{{ route('admin.courses.index') }}" class="btn btn-secondary ml-2">
-                                    <i class="fa fa-arrow-left"></i> Back to List
+                                    Back
                                 </a>
                             </div>
                         </div>
@@ -251,12 +248,6 @@
                                 </div>
                             </div>
                             <!-- end Course Quick links -->
-                        </div>
-                        <!-- Action Buttons -->
-                        <div class="mt-1">
-                            <a href="{{ route('admin.courses.index') }}" class="btn btn-secondary">
-                                <i class="mdi mdi-arrow-left"></i> Back
-                            </a>
                         </div>
                     </div>
                     <!-- End card body -->
