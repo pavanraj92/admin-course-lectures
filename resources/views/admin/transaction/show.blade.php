@@ -4,8 +4,7 @@
 @section('page-title', 'Transaction Details')
 
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="{{ route('admin.transactions.index') }}">Transactions</a></li>
-<li class="breadcrumb-item active" aria-current="page">{{ $transaction->transaction_reference ?? 'N/A' }}</li>
+<li class="breadcrumb-item"><a href="{{ route('admin.transactions.index') }}">Transaction Details</a></li>
 @endsection
 
 @section('content')
@@ -21,7 +20,7 @@
                             Transaction #{{ $transaction->transaction_reference ?? '—' }}
                         </h4>
                         <a href="{{ route('admin.transactions.index') }}" class="btn btn-secondary ml-2">
-                            <i class="mdi mdi-arrow-left"></i> Back to List
+                            Back
                         </a>
                     </div>
 

@@ -92,11 +92,9 @@
 
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary" id="saveBtn">
-                                    <i class="mdi mdi-content-save"></i>
-                                    {{ isset($lecture) ? 'Update Lecture' : 'Save Lecture' }}
+                                    {{ isset($lecture) ? 'Update' : 'Save' }}
                                 </button>
-                                <a href="{{ route('admin.lectures.index') }}" class="btn btn-secondary">
-                                    <i class="mdi mdi-arrow-left"></i> Back
+                                <a href="{{ route('admin.lectures.index') }}" class="btn btn-secondary">Back
                                 </a>
                             </div>
                         </div>

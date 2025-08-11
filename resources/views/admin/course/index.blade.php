@@ -2,10 +2,10 @@
 
 @section('title', 'Courses Management')
 
-@section('page-title', 'Manage Courses')
+@section('page-title', 'Course Manager')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item active" aria-current="page">Manage Courses</li>
+    <li class="breadcrumb-item active" aria-current="page">Course Manager</li>
 @endsection
 
 @section('content')
@@ -86,7 +86,7 @@
                             <!--create course button -->
                             <div class="text-right">
                                 <a href="{{ route('admin.courses.create') }}" class="btn btn-primary mb-3">
-                                    <i class="mdi mdi-plus"></i> Create New Course
+                                    Create New Course
                                 </a>
                             </div>
                         @endadmincan
@@ -95,7 +95,7 @@
                             <table class="table">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th scope="col">#</th>
+                                        <th scope="col">S. No.</th>
                                         <th scope="col">@sortablelink('title', 'Title', '', ['class' => 'text-dark'])</th>
                                         <th scope="col">Categories</th>
                                         <th scope="col">@sortablelink('level', 'Level', '', ['class' => 'text-dark'])</th>

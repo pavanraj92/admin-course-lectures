@@ -4,7 +4,7 @@
 @section('page-title', 'Report Manager')
 
 @section('breadcrumb')
-<li class="breadcrumb-item active" aria-current="page">Reports</li>
+<li class="breadcrumb-item active" aria-current="page">Report Manager</li>
 @endsection
 
 @section('content')
