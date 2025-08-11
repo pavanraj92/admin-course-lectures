@@ -1,10 +1,10 @@
 <?php
 
-namespace admin\courses\Requests;
+namespace admin\courses\Requests\Course;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CourseCreateRequest extends FormRequest
+class CourseUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,9 +19,11 @@ class CourseCreateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $courseId = $this->route('course')->id ?? $this->course;
+
         return [
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:courses,slug',
+            'slug' => 'nullable|string|max:255|unique:courses,slug,' . $courseId,
             'short_description' => 'nullable|string|max:500',
             'description' => 'nullable|string',
             'language' => 'required',
@@ -34,12 +36,12 @@ class CourseCreateRequest extends FormRequest
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'is_highlight' => 'boolean',
             'status' => 'required|in:pending,approved,rejected',            
-            
-           //thumbnail_image image laravel validation
-            //'thumbnail_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5120', // 5MB max
+
+            //thumbnail_image image laravel validation
+            'thumbnail_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:5120', // 5MB max
 
             // Fix the promo_video validation - remove 'video' rule
-            //'promo_video' => 'required|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
+            'promo_video' => 'nullable|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
 
             //categories validation
             'categories' => 'required|array',
@@ -64,7 +66,7 @@ class CourseCreateRequest extends FormRequest
         return [
             'title.required' => 'The course title is required.',
             'title.max' => 'The course title must not exceed 255 characters.',
-            'slug.unique' => 'The slug is already taken.',
+            'slug.unique' => 'This slug is already taken.',
             'level.required' => 'The course level is required.',
             'level.in' => 'The course level must be Beginner, Intermediate, Advanced, or Expert.',
             'status.required' => 'The course status is required.',

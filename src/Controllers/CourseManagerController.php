@@ -4,8 +4,8 @@ namespace admin\courses\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use admin\courses\Requests\CourseCreateRequest;
-use admin\courses\Requests\CourseUpdateRequest;
+use admin\courses\Requests\Course\CourseCreateRequest;
+use admin\courses\Requests\Course\CourseUpdateRequest;
 use admin\courses\Models\Course;
 use admin\categories\Models\Category;
 use admin\tags\Models\Tag;
