@@ -37,7 +37,7 @@
                                             <div class="form-group">
                                                 <label class="font-weight-bold">User:</label>
                                                 <p>
-                                                    {{ $purchase->user->name ?? '—' }}<br>
+                                                    {{ $purchase->user->name ?? 'N/A' }}<br>
                                                     <small class="text-muted">{{ $purchase->user->email ?? '' }}</small>
                                                 </p>
                                             </div>
@@ -75,7 +75,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="font-weight-bold">Purchased On:</label>
-                                                <p>{{ $purchase->created_at?->format('F d, Y g:i A') ?? '—' }}</p>
+                                                <p>{{ $purchase->created_at ? $purchase->created_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s') : '—' }}</p>
                                             </div>
                                         </div>
                                         <div class="col-md-6">

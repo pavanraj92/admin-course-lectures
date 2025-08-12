@@ -103,4 +103,9 @@ class CoursePurchase extends Model
             ? Config::get('get.admin_page_limit')
             : 10;
     }
+
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }

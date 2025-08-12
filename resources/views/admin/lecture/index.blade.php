@@ -117,16 +117,13 @@
                                         <span class="badge badge-info">{{ ucfirst($lecture->type) }}</span>
                                     </td>
                                     <td>
-                                        @if ($lecture->status == 'published')
-                                        <span class="badge badge-success">Published</span>
-                                        @elseif ($lecture->status == 'draft')
-                                        <span class="badge badge-warning">Draft</span>
-                                        @else
-                                        <span class="badge badge-secondary">{{ ucfirst($lecture->status) }}</span>
-                                        @endif
+                                        @php
+                                        $color = config('course.constants.statusBadge.' . $lecture->status, 'badge-secondary');
+                                        @endphp
+                                        <p><span class="badge {{ $color }}">{{ ucfirst($lecture->status) }}</span></p>
                                     </td>
                                     <td>
-                                        {{ $lecture->created_at ? $lecture->created_at->format(config('GET.admin_date_time_format') ?? 'M d, Y') : '—' }}
+                                        {{ $lecture->created_at ? $lecture->created_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s') : '—' }}
                                     </td>
                                     <td>
                                         @admincan('lectures_manager_view')
