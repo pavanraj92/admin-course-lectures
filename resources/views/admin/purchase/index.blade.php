@@ -77,22 +77,19 @@
                                 <tr>
                                     <td scope="row">{{ $i }}</td>
                                     <td>
-                                        {{ $purchase?->user?->name ?? 'No User Assigned' }}<br>
+                                        {{ $purchase?->user?->name ?? 'N/A' }}<br>
                                         <small class="text-muted">{{ $purchase?->user?->email }}</small>
                                     </td>
                                     <td>{{ $purchase?->course?->title ?? 'No Course' }}</td>
                                     <td>{{ config('GET.currency_sign') }}{{ number_format($purchase->amount, 2) }}</td>
                                     <td>{{ isset($purchase->currency) ? $purchase->currency : config('GET.default_currency') }}</td>
                                     <td>
-                                        @if ($purchase->status == 'completed')
-                                        <span class="badge badge-success">Completed</span>
-                                        @elseif ($purchase->status == 'pending')
-                                        <span class="badge badge-warning">Pending</span>
-                                        @else
-                                        <span class="badge badge-danger">Cancelled</span>
-                                        @endif
+                                        @php
+                                            $color = config('course.constants.statusBadge.' . $purchase->status, 'badge-secondary');
+                                        @endphp
+                                        <p><span class="badge {{ $color }}">{{ ucfirst($purchase->status) }}</span></p>                                       
                                     </td>
-                                    <td>{{ $purchase->created_at ? $purchase->created_at->format(config('GET.admin_date_time_format') ?? 'M d, Y') : '—' }}</td>
+                                    <td>{{ $purchase->created_at ? $purchase->created_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s') : '—' }}</td>
                                     <td>
                                         @admincan('course_purchases_view')
                                         <a href="{{ route('admin.course-purchases.show', $purchase) }}"

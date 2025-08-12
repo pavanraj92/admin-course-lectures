@@ -2,7 +2,6 @@
 
 namespace admin\courses\Models;
 
-// use admin\courses\Models\CoursePurchase;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -52,16 +51,15 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Future link to course purchase
-    // public function coursePurchase(): BelongsTo
-    // {
-    //     return $this->belongsTo(CoursePurchase::class, 'transaction_reference', 'transaction_id');
-    // }
-
     public static function getPerPageLimit(): int
     {
         return Config::has('get.admin_page_limit')
             ? Config::get('get.admin_page_limit')
             : 10;
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

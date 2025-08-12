@@ -57,12 +57,7 @@
                                             <div class="form-group">
                                                 <label class="font-weight-bold">Status:</label>
                                                 @php
-                                                $statusColors = [
-                                                'pending' => 'badge-warning',
-                                                'success' => 'badge-success',
-                                                'failed' => 'badge-danger',
-                                                ];
-                                                $color = $statusColors[$transaction->status] ?? 'badge-secondary';
+                                                $color = config('course.constants.statusBadge.' . $transaction->status, 'badge-secondary');
                                                 @endphp
                                                 <p><span class="badge {{ $color }}">{{ ucfirst($transaction->status) }}</span></p>
                                             </div>
@@ -72,27 +67,35 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="font-weight-bold">Date:</label>
-                                                <p>{{ $transaction->created_at ? $transaction->created_at->format('F d, Y g:i A') : '—' }}</p>
+                                                <p>{{ $transaction->created_at ? $transaction->created_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s'): '—' }}</p>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="font-weight-bold">User:</label>
-                                                @if($transaction->user)
+                                                @if(class_exists(\admin\users\Models\User::class))
                                                 <p>
-                                                    {{ $transaction->user->name }} <br>
-                                                    <small class="text-muted">{{ $transaction->user->email }}</small>
+                                                    {{ $transaction?->user?->name ?? 'N/A' }} <br>
+                                                    <small class="text-muted">{{ $transaction?->user?->email }}</small>
                                                 </p>
                                                 @else
-                                                <p>—</p>
+                                                <p>N/A</p>
                                                 @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="font-weight-bold">Created:</label>
+                                                <p>{{ $transaction->created_at ? $transaction->created_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s'): '—' }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Metadata -->
+                        <!-- Metadata -->
+                        <div class="col-md-4">
                             <div class="card">
                                 <div class="card-header bg-primary">
                                     <h5 class="mb-0 text-white font-bold">Metadata</h5>
@@ -114,24 +117,13 @@
                             </div>
                         </div>
 
-                        <!-- Right Column: Actions & Info -->
-                        <div class="col-md-4">                            
-                            <div class="card">
-                                <div class="card-header bg-primary">
-                                    <h5 class="mb-0 text-white font-bold">Additional Info</h5>
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>Created:</strong> {{ $transaction->created_at->format('M d, Y g:i A') }}</p>
-                                    <p><strong>Last Updated:</strong> {{ $transaction->updated_at->format('M d, Y g:i A') }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- /.row -->
+                    </div>
+                </div> <!-- /.row -->
 
-                </div>
             </div>
-
         </div>
+
     </div>
+</div>
 </div>
 @endsection

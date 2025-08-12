@@ -26,7 +26,7 @@ Route::name('admin.')->middleware(['web', 'admin.auth'])->group(function () {
     // Course Purchases
     Route::resource('course-purchases', CoursePurchaseManagerController::class);
 
-    // Report Manager
+    // Report
     Route::get('reports', [ReportManagerController::class, 'index'])->name('reports.index');
 
 });

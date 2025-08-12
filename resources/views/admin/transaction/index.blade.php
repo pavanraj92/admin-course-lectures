@@ -37,7 +37,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>                        
+                        </div>
                         <div class="col-auto mt-1 text-right">
                             <div class="form-group">
                                 <button type="submit" form="filterForm" class="btn btn-primary mt-4">Filter</button>
@@ -77,7 +77,13 @@
                                 <tr>
                                     <td scope="row">{{ $i }}</td>
                                     <td>{{ $transaction->transaction_reference }}</td>
-                                    <td>{{ $transaction?->user?->name ?? 'No User Assigned' }}</td>
+                                    <td>
+                                        @if (class_exists(\admin\users\Models\User::class))
+                                        {{ $transaction?->user?->name ?? 'N/A' }}
+                                        @else
+                                        N/A
+                                        @endif
+                                    </td>
                                     <td>{{ ucfirst($transaction->payment_gateway) }}</td>
                                     <td>{{ $transaction->amount }}</td>
                                     <td>{{ $transaction->currency }}</td>
@@ -91,7 +97,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{ $transaction->created_at ? $transaction->created_at->format(config('GET.admin_date_time_format') ?? 'M d, Y') : '—' }}
+                                        {{ $transaction->created_at ? $transaction->created_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s') : '—' }}
                                     </td>
                                     <td>
                                         @admincan('transactions_manager_view')
@@ -108,7 +114,7 @@
                                 @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="7" class="text-center">No records found.</td>
+                                    <td colspan="9" class="text-center">No records found.</td>
                                 </tr>
                                 @endif
                             </tbody>
