@@ -59,7 +59,7 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">S. No.</th>
-                                    <th scope="col">@sortablelink('user.name', 'User', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
+                                    <th scope="col">@sortablelink('user', 'User', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
                                     <th scope="col">@sortablelink('course.title', 'Course', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
                                     <th scope="col">@sortablelink('amount', 'Amount', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
                                     <th scope="col">Currency</th>
