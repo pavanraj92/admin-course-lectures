@@ -40,7 +40,7 @@ class CoursePurchase extends Model
     ];
 
     protected $sortable = [
-        'user.name',
+        'user',
         'course.title',
         'amount',
         'status',
@@ -49,8 +49,9 @@ class CoursePurchase extends Model
 
     public function userSortable($query, $direction)
     {
-        return $query->join('users', 'course_purchases.user_id', '=', 'users.id')
-            ->orderBy('users.name', $direction)
+        return $query
+            ->leftJoin('users', 'course_purchases.user_id', '=', 'users.id')
+            ->orderByRaw("CONCAT(users.first_name, ' ', users.last_name) {$direction}")
             ->select('course_purchases.*');
     }
 
