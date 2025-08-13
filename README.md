@@ -1,103 +1,111 @@
-# Admin Courses Package
+# Admin Course Manager
 
-A comprehensive Laravel package for managing educational courses with integration to categories and tags packages, featuring approval workflow and featured course management.
+This package provides an Admin Course Manager for managing courses, lectures, purchases, reports, and transactions within your Laravel application.
 
 ## Features
+- Create, edit, and delete courses
+- Manage lectures and course sections
+- Handle course purchases and transactions
+- Generate purchase and transaction reports
+- Tagging and categorization for courses
+- Publishable migrations, views, and configuration for customization
+- Fully namespaced and compatible with Modules/Courses structure
+- Routes are auto-registered based on your admin slug
 
-- **Course Management**: Create, read, update, and delete courses with soft delete functionality
-- **Course Approval Workflow**: Pending/Approved/Rejected status management
-- **Featured Courses**: Highlight selected courses on homepage
-- **External Package Integration**: 
-  - Uses `admin/categories` package for course categorization
-  - Uses `admin/tags` package for course tagging
-- **Rich Course Information**: Title, short description, description, difficulty level, language, thumbnails, promo videos
-- **Filtering & Sorting**: Advanced filtering by status, level, language with sortable columns
-- **Responsive Design**: Modern Bootstrap-based interface
+## Requirements
+PHP >= 8.2
+Laravel Framework >= 12.x
 
-## Package Dependencies
+## Installation
+### 1. Add Git Repository to `composer.json`
 
-This package requires the following packages to be installed:
-- `admin/categories` - For course categorization
-- `admin/tags` - For course tagging
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/pavanraj92/admin-course-lectures.git"
+    }
+]
+```
 
-## Database Structure
+### 2. Require the package via Composer
+    ```bash
+    composer require admin/courses:@dev
+    ```
 
-### Tables Created
+### 3. Publish assets
+    ```bash
+    php artisan courses:publish --force
+    ```
+---
 
-1. **courses** - Main course information
-   - id, title, slug, short_description, description, language, level, is_highlight, thumbnail_url, promo_video_url, status, timestamps, soft deletes
-
-2. **course_category** - Course-Category pivot table (references categories package)
-   - id, course_id, category_id, timestamps
-
-3. **course_tag** - Course-Tag pivot table (references tags package)
-   - id, course_id, tag_id, timestamps
-
-### External Tables Used
-- **categories** - From `admin/categories` package
-- **tags** - From `admin/tags` package
-
-## Models & Relationships
-
-- **Course Model**: 
-  - Belongs to many Categories (via `admin\categories\Models\Category`)
-  - Belongs to many Tags (via `admin\tags\Models\Tag`)
-  - Sortable & Filterable capabilities
-  - Soft delete functionality
-
-## Controllers & Views
-
-- **CourseManagerController**: Full CRUD operations with status management
-- **Responsive Views**: Index, create/edit, and detail views with proper integration
-- **AJAX Status Updates**: Real-time status and highlight toggles
-- **External Model Integration**: Properly references Category and Tag models from their respective packages
-
-## Installation Requirements
-
-Before installing this package, ensure these packages are installed:
-1. `admin/categories` - Required for course categorization
-2. `admin/tags` - Required for course tagging
-
-## Installation Commands
-
-The package includes console commands for:
-- `courses:publish` - Publish module files
-- `courses:status` - Check installation status  
-- `courses:debug` - Debug configuration
-- `courses:test-views` - Test view resolution
-
-## Routes
-
-- `/admin/courses` - Course listing with filters
-- `/admin/courses/create` - Create new course
-- `/admin/courses/{id}` - View course details
-- `/admin/courses/{id}/edit` - Edit course
-- `/admin/courses/updateStatus` - AJAX status updates
-- `/admin/courses/updateHighlight` - AJAX highlight toggles
-
-## Configuration
-
-Course-specific configuration in `config/course.php` includes status labels, level badges, and highlight indicators.
-
-## Industry Package Integration
-
-This package is included in the following industry configurations:
-- **Education**: Core package for educational institutions and learning platforms
-
-## Dependencies
-
-- Laravel 8+
-- Kyslik ColumnSortable package
-- Bootstrap 4/5 for UI
-- Select2 for multi-select functionality
-- `admin/categories` package for categorization
-- `admin/tags` package for tagging
 
 ## Usage
+1. Create Course – Add a new course with title, description, category, tags, and price.
+2. Manage Lectures – Create and organize lectures into course sections.
+3. Handle Purchases – View and manage student purchases.
+4. Track Transactions – View all related financial transactions.
+5. View Reports – Access reports for purchases and transactions.
 
-After installation, courses can be managed through the admin panel with:
-- Full CRUD operations with validation
-- Category assignment from categories package
-- Tag assignment from tags package  
-- Approval workflow management
-- Featured course highlighting
+---
+
+### Admin Panel Routes
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | `/courses` | List all courses |
+| GET    | `/courses/create` | Create course form |
+| POST   | `/courses` | Store new course |
+| GET    | `/courses/{id}` | Show course details |
+| GET    | `/courses/{id}/edit` | Edit course form |
+| PUT    | `/courses/{id}` | Update course |
+| DELETE | `/courses/{id}` | Delete course |
+| POST | `/courses/updateStatus` | Update course status|
+| POST | `/courses/updateHighlight` | Update course highlights|
+
+| GET    | `/lectures` | List all lectures |
+| GET    | `/lectures/create` | Create lecture form |
+| POST   | `/lectures` | Store new lecture |
+| GET    | `/lectures/{id}` | Show lecture details |
+| GET    | `/lectures/{id}/edit` | Edit lecture form |
+| PUT    | `/lectures/{id}` | Update lecture |
+| DELETE | `/lectures/{id}` | Delete lecture |
+| POST | `/lectures/updateStatus` | Update lecture status|
+| POST | `/lectures/updateHighlight` | Update lecture highlights|
+| GET | `/fetch/course/section/{course}` | Fetch course sections|
+
+| GET    | `/transactions` | List all transactions|
+| GET | `/transactions/{id}` | Sgow transactions details |
+
+| GET    | `/course-purchases` | List all course purchases |
+| GET    | `/course-purchases/{id}` | Show course purchases details |
+
+| GET | `/reports` | Get course report|
+
+---
+
+## Protecting Admin Routes
+
+Protect your routes using the provided middleware:
+
+```php
+Route::middleware(['web','admin.auth'])->group(function () {
+    // Admin routes here
+});
+```
+---
+
+## Database Tables
+
+- `courses` - Stores courses details.
+- `course_category` - Pivot table linking courses to category.  
+- `course_tag` - Pivot table linking courses to tag.
+- `course_sections` - Pivot table linking courses to sections.
+- `lectures` - Stores lectures details.
+- `course_purchases` - Pivot table linking courses to purchases.
+- `course_transactions` - Pivot table linking courses to transactions.
+
+---
+
+## License
+
+This package is open-sourced software licensed under the MIT license.
