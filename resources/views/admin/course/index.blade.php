@@ -118,7 +118,7 @@
                                                     <strong>{{ $course->title }}</strong>
                                                     @if ($course->short_description)
                                                         <br><small
-                                                            class="text-muted">{{ Str::limit($course->short_description, 50) }}</small>
+                                                            class="text-muted">{!! Str::limit($course->short_description, 50) !!}</small>
                                                     @endif
                                                     @if ($course->thumbnail_url)
                                                         <br><small class="text-success"><i class="mdi mdi-image"></i> Has
@@ -230,7 +230,7 @@
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="9" class="text-center">No courses found.</td>
+                                            <td colspan="9" class="text-center">No records found.</td>
                                         </tr>
                                     @endif
                                 </tbody>

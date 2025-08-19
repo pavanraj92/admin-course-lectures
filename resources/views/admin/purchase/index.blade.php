@@ -59,12 +59,12 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">S. No.</th>
-                                    <th scope="col">@sortablelink('user', 'User', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
-                                    <th scope="col">@sortablelink('course.title', 'Course', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
-                                    <th scope="col">@sortablelink('amount', 'Amount', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
+                                    <th scope="col">@sortablelink('user', 'User', [], ['class' => 'text-dark'])</th>
+                                    <th scope="col">@sortablelink('course.title', 'Course', [], ['class' => 'text-dark'])</th>
+                                    <th scope="col">@sortablelink('amount', 'Amount', [], ['class' => 'text-dark'])</th>
                                     <th scope="col">Currency</th>
-                                    <th scope="col">@sortablelink('status', 'Status', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
-                                    <th scope="col">@sortablelink('created_at', 'Purchased At', [], ['style' => 'color: #4F5467; text-decoration: none;'])</th>
+                                    <th scope="col">@sortablelink('status', 'Status', [], ['class' => 'text-dark'])</th>
+                                    <th scope="col">@sortablelink('created_at', 'Purchased At', [], ['class' => 'text-dark'])</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
