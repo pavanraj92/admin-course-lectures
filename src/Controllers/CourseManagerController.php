@@ -11,6 +11,8 @@ use admin\categories\Models\Category;
 use admin\tags\Models\Tag;
 use Illuminate\Support\Str;
 use admin\admin_auth\Services\ImageService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CourseManagerController extends Controller
 {
@@ -81,10 +83,10 @@ class CourseManagerController extends Controller
 
             // promo_video upload
             if ($request->hasFile('promo_video')) {
-                $requestData['promo_video'] = $this->imageService->upload($request->file('promo_video'), 'course');           
+                $requestData['promo_video'] = $this->imageService->upload($request->file('promo_video'), 'course');
             }
 
-            $course = Course::create($requestData);          
+            $course = Course::create($requestData);
 
             // Sync categories if provided
             if (isset($requestData['categories'])) {
@@ -163,7 +165,7 @@ class CourseManagerController extends Controller
                 $course['promo_video'] = $this->imageService->upload($request->file('promo_video'), 'course/videos');
             }
 
-            $course->update($requestData);            
+            $course->update($requestData);
 
             // Sync categories if provided
             if (isset($requestData['categories'])) {
@@ -225,6 +227,19 @@ class CourseManagerController extends Controller
     public function destroy(Course $course)
     {
         try {
+            // Check if courses table exists and category is assigned
+            if (Schema::hasTable('lectures')) {
+                $isAssigned =  DB::table('lectures')
+                    ->where('course_id', $course->id)
+                    ->count();
+
+                if ($isAssigned > 0) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Sorry, you cannot delete because this course is associated with one or more lectures.'
+                    ], 400);
+                }
+            }
             $course->delete();
             return response()->json(['success' => true, 'message' => 'Course deleted successfully.']);
         } catch (\Exception $e) {
@@ -292,7 +307,7 @@ class CourseManagerController extends Controller
                 . ' data-id="' . $course->id . '"'
                 . ' class="btn ' . $btnClass . ' btn-sm update-status">' . $label . '</a>';
 
-            return response()->json(['success' => true, 'message' => 'Highlight status updated to ' . $label, 'strHtml' => $strHtml]);            
+            return response()->json(['success' => true, 'message' => 'Highlight status updated to ' . $label, 'strHtml' => $strHtml]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Failed to update highlight status.', 'error' => $e->getMessage()], 500);
         }
