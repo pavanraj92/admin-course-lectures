@@ -115,7 +115,7 @@
                         <div class="card-body">
                             <!--courses display in the select2 dropdown -->
                             @if (request()->query('course'))
-                                <input type="hidden" name="course_id" value="{{ request()->query('course') }}">
+                                <input type="hidden" name="course_id" id="course_id" value="{{ request()->query('course') }}">
                             @else
                                 <div class="row">
                                     <div class="col-md-12">

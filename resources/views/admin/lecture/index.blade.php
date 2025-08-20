@@ -101,7 +101,7 @@
                                         <strong>{{ $lecture->title }}</strong>
                                         @if ($lecture->short_description)
                                         <br><small
-                                            class="text-muted">{{ Str::limit($lecture->short_description, 50) }}</small>
+                                            class="text-muted">{!! Str::limit($lecture->short_description, 50) !!}</small>
                                         @endif
                                     </td>
                                     <td>
