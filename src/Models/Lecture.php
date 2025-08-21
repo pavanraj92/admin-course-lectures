@@ -23,9 +23,10 @@ class Lecture extends Model
         'title',
         'slug',
         'short_description',
-        'description',        
+        'description',
         'type',
         'video',
+        'audio',
         'attachment',
         'duration',
         'order',
@@ -210,6 +211,14 @@ class Lecture extends Model
         return null;
     }
 
+    public function getAudioUrlAttribute()
+    {
+        if ($this->audio) {
+            return asset('storage/' . $this->audio);
+        }
+        return null;
+    }
+
     /**
      * Get the attachment URL if attachment exists.
      */
@@ -261,7 +270,6 @@ class Lecture extends Model
         return match ($this->type) {
             'video' => 'badge-primary',
             'audio' => 'badge-info',
-            'text' => 'badge-secondary',            
             default => 'badge-light'
         };
     }
@@ -272,6 +280,11 @@ class Lecture extends Model
     public function hasVideo()
     {
         return !empty($this->video);
+    }
+
+    public function hasAudio()
+    {
+        return !empty($this->audio);
     }
 
     /**

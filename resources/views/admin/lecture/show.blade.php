@@ -72,7 +72,7 @@
                                 </div>
                             </div>
 
-                            @if ($lecture->hasVideo() || $lecture->hasAttachment())
+                            @if ($lecture->hasVideo() || $lecture->hasAudio() || $lecture->hasAttachment())
                             <div class="card mt-3">
                                 <div class="card-header bg-primary">
                                     <h5 class="mb-0 text-white">Media Files</h5>
@@ -85,6 +85,20 @@
                                             class="btn btn-outline-primary btn-sm">
                                             <i class="mdi mdi-play"></i> Watch Video
                                         </a>
+                                    </div>
+                                    @endif
+
+                                    {{-- Audio --}}
+                                    @if ($lecture->type === 'audio' && $lecture->hasAudio())
+                                    <div class="mb-3">
+                                        <label class="font-weight-bold">Audio:</label>
+                                        <div>
+                                            <audio controls>
+                                                <source src="{{ $lecture->audio_url }}" type="audio/mpeg">
+                                                Your browser does not support the audio element.
+                                            </audio>
+                                        </div>
+
                                     </div>
                                     @endif
 

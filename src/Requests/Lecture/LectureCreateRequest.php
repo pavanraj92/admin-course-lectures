@@ -25,8 +25,9 @@ class LectureCreateRequest extends FormRequest
             'title' => 'required|string|max:255',
             'short_description' => 'nullable|string|max:500',
             'description' => 'nullable|string',            
-            'type' => 'required|in:video,audio,text,quiz',
-            'video' => 'required|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
+            'type' => 'required|in:video,audio',
+            'video' => 'required_if:type,video|nullable|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
+            'audio' => 'required_if:type,audio|nullable|file|mimes:mp3,wav,ogg|max:20480',
             'attachment' => 'nullable|file|mimes:jpg,pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar|max:51200', // 50MB max
             'duration' => 'nullable|integer|min:1',
             'order' => 'nullable|integer|min:0',
@@ -48,7 +49,7 @@ class LectureCreateRequest extends FormRequest
             'title.max' => 'Lecture title cannot exceed 255 characters.',
             'short_description.max' => 'Short description cannot exceed 500 characters.',
             'type.required' => 'Lecture type is required.',
-            'type.in' => 'Lecture type must be video, audio, text, or quiz.',
+            'type.in' => 'Lecture type must be video, audio.',
             'video.mimes' => 'Video must be a file of type: mp4, avi, mov, wmv, flv, webm.',
             'video.max' => 'Video file size cannot exceed 100MB.',
             'attachment.mimes' => 'Attachment must be a file of type: pdf, doc, docx, ppt, pptx, xls, xlsx, zip, rar.',
