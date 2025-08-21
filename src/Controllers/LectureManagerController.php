@@ -50,7 +50,7 @@ class LectureManagerController extends Controller
                 ->withQueryString();
 
             $statuses = ['draft', 'published', 'archived'];
-            $types = ['video', 'audio', 'text'];
+            $types = ['video', 'audio'];
 
             // Get course info if filtering by course
             $course = $courseId ? Course::find($courseId) : null;
@@ -68,8 +68,8 @@ class LectureManagerController extends Controller
             $courseId = request()->query('course');
             $sections = CourseSection::where('course_id', $courseId)->pluck('title', 'id')->toArray();
             //pluck courses data
-            $courses = Course::where('status', 'approved')->pluck('title', 'id')->toArray();           
-            $types = ['video', 'audio', 'text'];
+            $courses = Course::where('status', 'approved')->pluck('title', 'id')->toArray();
+            $types = ['video', 'audio'];
             $statuses = ['draft', 'published', 'archived'];
 
             return view('course::admin.lecture.createOrEdit', compact('sections', 'courses', 'types', 'statuses'));
@@ -92,6 +92,12 @@ class LectureManagerController extends Controller
             if ($request->hasFile('video')) {
                 $requestData['video'] = $this->imageService->upload($request->file('video'), 'lecture/videos');
             }
+
+            // audio upload
+            if ($request->hasFile('audio')) {
+                $requestData['audio'] = $this->imageService->upload($request->file('audio'), 'lecture/audios');
+            }
+
 
             // attachment upload
             if ($request->hasFile('attachment')) {
@@ -144,14 +150,14 @@ class LectureManagerController extends Controller
 
     public function edit(Lecture $lecture)
     {
-        try {           
+        try {
             $lecture->load(['section']);
             //pluck courses data
-            $courses = Course::where('status', 'approved')->pluck('title', 'id')->toArray();           
+            $courses = Course::where('status', 'approved')->pluck('title', 'id')->toArray();
             //fetch query string for sections
-            $courseId = request()->query('course');
+            $courseId = request()->query('course') ?? $lecture->course_id;
             $sections = CourseSection::where('course_id', $courseId)->pluck('title', 'id')->toArray();
-            $types = ['video', 'audio', 'text'];
+            $types = ['video', 'audio'];
             $statuses = ['draft', 'published', 'archived'];
 
             return view('course::admin.lecture.createOrEdit', compact('lecture', 'courses', 'sections', 'types', 'statuses'));
@@ -173,6 +179,11 @@ class LectureManagerController extends Controller
             // video upload
             if ($request->hasFile('video')) {
                 $requestData['video'] = $this->imageService->upload($request->file('video'), 'lecture/videos');
+            }
+
+            // audio upload
+            if ($request->hasFile('audio')) {
+                $requestData['audio'] = $this->imageService->upload($request->file('audio'), 'lecture/audios');
             }
 
             // attachment upload
@@ -286,11 +297,11 @@ class LectureManagerController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to update highlight status.', 'error' => $e->getMessage()], 500);
         }
     }
-        /**
+    /**
      * Fetch sections for a given course (AJAX).
      */
     public function fetchCourseSections($courseId)
-    {        
+    {
         $sections = CourseSection::where('course_id', $courseId)
             ->select('id', 'title')
             ->orderBy('id', 'asc')
