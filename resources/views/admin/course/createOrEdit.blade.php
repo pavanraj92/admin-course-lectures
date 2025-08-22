@@ -31,7 +31,7 @@
                         <!--card body section -->
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label>Course Title <span class="text-danger">*</span></label>
                                         <input type="text" name="title" id="title" class="form-control"
@@ -42,7 +42,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Slug</label>
                                         <input type="text" name="slug" id="slug" class="form-control"
@@ -52,7 +52,7 @@
                                             <div class="text-danger validation-error">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="form-group">
@@ -474,15 +474,15 @@
             });
 
             // Auto-generate slug from title
-            $('#title').on('input', function() {
-                if ($('#slug').val() === '') {
-                    var slug = $(this).val().toLowerCase()
-                        .replace(/[^a-z0-9 -]/g, '') // remove invalid characters
-                        .replace(/\s+/g, '-') // replace spaces with hyphens
-                        .replace(/-+/g, '-'); // remove duplicate hyphens
-                    $('#slug').val(slug);
-                }
-            });
+            // $('#title').on('input', function() {
+            //     if ($('#slug').val() === '') {
+            //         var slug = $(this).val().toLowerCase()
+            //             .replace(/[^a-z0-9 -]/g, '') // remove invalid characters
+            //             .replace(/\s+/g, '-') // replace spaces with hyphens
+            //             .replace(/-+/g, '-'); // remove duplicate hyphens
+            //         $('#slug').val(slug);
+            //     }
+            // });
 
             // Remove old image input logic (Dropzone now handles preview)
 

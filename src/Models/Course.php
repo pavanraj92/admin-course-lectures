@@ -7,10 +7,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
 use Kyslik\ColumnSortable\Sortable;
+use Illuminate\Support\Str;
+
 
 class Course extends Model
 {
     use HasFactory, Sortable, SoftDeletes;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($course) {
+            if (empty($course->slug)) {
+                $course->slug = Str::slug($course->title, '_');
+            }
+        });
+
+        static::updating(function ($course) {
+            if ($course->isDirty('title')) {
+                $course->slug = Str::slug($course->title, '_');
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +38,7 @@ class Course extends Model
         'title',
         'slug',
         'short_description',
-        'description',        
+        'description',
         'language',
         'duration',
         'price',
@@ -58,9 +77,9 @@ class Course extends Model
     public function categories()
     {
         return $this->belongsToMany(
-            'admin\categories\Models\Category', 
-            'course_category', 
-            'course_id', 
+            'admin\categories\Models\Category',
+            'course_category',
+            'course_id',
             'category_id'
         )->using(CourseCategory::class)->withTimestamps();
     }
@@ -71,9 +90,9 @@ class Course extends Model
     public function courseTags()
     {
         return $this->belongsToMany(
-            'admin\tags\Models\Tag', 
-            'course_tag', 
-            'course_id', 
+            'admin\tags\Models\Tag',
+            'course_tag',
+            'course_id',
             'tag_id'
         )->using(CourseTag::class)->withTimestamps();
     }

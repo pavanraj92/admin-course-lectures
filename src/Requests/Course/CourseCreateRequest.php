@@ -21,7 +21,7 @@ class CourseCreateRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:courses,slug',
+            // 'slug' => 'nullable|string|max:255|unique:courses,slug',
             'short_description' => 'nullable|string|max:500',
             'description' => 'nullable|string',
             'language' => 'required',
@@ -64,7 +64,7 @@ class CourseCreateRequest extends FormRequest
         return [
             'title.required' => 'The course title is required.',
             'title.max' => 'The course title must not exceed 255 characters.',
-            'slug.unique' => 'The slug is already taken.',
+            // 'slug.unique' => 'The slug is already taken.',
             'level.required' => 'The course level is required.',
             'level.in' => 'The course level must be Beginner, Intermediate, Advanced, or Expert.',
             'status.required' => 'The course status is required.',

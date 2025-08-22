@@ -72,9 +72,9 @@ class CourseManagerController extends Controller
             $requestData = $request->validated();
 
             // Generate slug if not provided
-            if (empty($requestData['slug'])) {
-                $requestData['slug'] = Str::slug($requestData['title']);
-            }
+            // if (empty($requestData['slug'])) {
+            //     $requestData['slug'] = Str::slug($requestData['title']);
+            // }
 
             //thumbnail_image upload
             if ($request->hasFile('thumbnail_image')) {
@@ -151,9 +151,9 @@ class CourseManagerController extends Controller
             $requestData = $request->validated();
 
             // Generate slug if not provided
-            if (empty($requestData['slug'])) {
-                $requestData['slug'] = Str::slug($requestData['title']);
-            }
+            // if (empty($requestData['slug'])) {
+            //     $requestData['slug'] = Str::slug($requestData['title']);
+            // }
 
             //thumbnail_image upload
             if ($request->hasFile('thumbnail_image')) {
