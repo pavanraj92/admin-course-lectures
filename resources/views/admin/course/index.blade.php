@@ -128,7 +128,7 @@
                                     <td>
                                         @if ($course->categories->count() > 0)
                                         @foreach ($course->categories as $category)
-                                        <span class="badge badge-light">{{ $category->title }}</span>
+                                        {{ $category->title }}
                                         @endforeach
                                         @else
                                         —
@@ -144,9 +144,9 @@
                                         ];
                                         $badgeClass = $levelBadgeClasses[$course->level] ?? 'secondary';
                                         @endphp
-                                        <span class="badge badge-{{ $badgeClass }}">
-                                            {{ ucfirst($course->level) }}
-                                        </span>
+
+                                        {{ ucfirst($course->level) }}
+
                                     </td>
                                     <td>{{ $course->language ?? '—' }}</td>
                                     <td>

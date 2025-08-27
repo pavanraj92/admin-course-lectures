@@ -33,28 +33,7 @@ class CourseServiceProvider extends ServiceProvider
             base_path('Modules/Courses/resources/views'),
             resource_path('views/admin/lecture'),
             __DIR__ . '/../resources/views'
-        ], 'lecture');
-
-        // Purchase views
-        $this->loadViewsFrom([
-            base_path('Modules/Courses/resources/views'),
-            resource_path('views/admin/purchase'),
-            __DIR__ . '/../resources/views'
-        ], 'purchase');
-
-        // Report views
-        $this->loadViewsFrom([
-            base_path('Modules/Courses/resources/views'),
-            resource_path('views/admin/report'),
-            __DIR__ . '/../resources/views'
-        ], 'report');
-
-        // Transaction views
-        $this->loadViewsFrom([
-            base_path('Modules/Courses/resources/views'),
-            resource_path('views/admin/transaction'),
-            __DIR__ . '/../resources/views'
-        ], 'transaction');
+        ], 'lecture');       
 
         // Extra namespace for explicit usage
         if (is_dir(base_path('Modules/Courses/resources/views'))) {
@@ -140,18 +119,12 @@ class CourseServiceProvider extends ServiceProvider
             // Controllers
             "$srcBase/Controllers/CourseManagerController.php"          => "$moduleBase/app/Http/Controllers/Admin/CourseManagerController.php",
             "$srcBase/Controllers/LectureManagerController.php"         => "$moduleBase/app/Http/Controllers/Admin/LectureManagerController.php",
-            "$srcBase/Controllers/CoursePurchaseManagerController.php"  => "$moduleBase/app/Http/Controllers/Admin/CoursePurchaseManagerController.php",
-            "$srcBase/Controllers/TransactionManagerController.php"     => "$moduleBase/app/Http/Controllers/Admin/TransactionManagerController.php",
-            "$srcBase/Controllers/ReportManagerController.php"          => "$moduleBase/app/Http/Controllers/Admin/ReportManagerController.php",
 
             // Models
             "$srcBase/Models/Course.php"            => "$moduleBase/app/Models/Course.php",
             "$srcBase/Models/CourseCategory.php"    => "$moduleBase/app/Models/CourseCategory.php",
-            "$srcBase/Models/CoursePurchase.php"    => "$moduleBase/app/Models/CoursePurchase.php",
             "$srcBase/Models/CourseSection.php"     => "$moduleBase/app/Models/CourseSection.php",
-            "$srcBase/Models/CourseTag.php"         => "$moduleBase/app/Models/CourseTag.php",
             "$srcBase/Models/Lecture.php"           => "$moduleBase/app/Models/Lecture.php",
-            "$srcBase/Models/Transaction.php"       => "$moduleBase/app/Models/Transaction.php",
 
             // Requests
             "$srcBase/Requests/Course/CourseCreateRequest.php"      => "$moduleBase/app/Http/Requests/Course/CourseCreateRequest.php",

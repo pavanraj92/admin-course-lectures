@@ -1,12 +1,10 @@
 # Admin Course Manager
 
-This package provides an Admin Course Manager for managing courses, lectures, purchases, reports, and transactions within your Laravel application.
+This package provides an Admin Course Manager for managing courses, lectures within your Laravel application.
 
 ## Features
 - Create, edit, and delete courses
 - Manage lectures and course sections
-- Handle course purchases and transactions
-- Generate purchase and transaction reports
 - Tagging and categorization for courses
 - Publishable migrations, views, and configuration for customization
 - Fully namespaced and compatible with Modules/Courses structure
@@ -43,9 +41,6 @@ Laravel Framework >= 12.x
 ## Usage
 1. Create Course – Add a new course with title, description, category, tags, and price.
 2. Manage Lectures – Create and organize lectures into course sections.
-3. Handle Purchases – View and manage student purchases.
-4. Track Transactions – View all related financial transactions.
-5. View Reports – Access reports for purchases and transactions.
 
 ---
 
@@ -73,14 +68,6 @@ Laravel Framework >= 12.x
 | POST | `/lectures/updateHighlight` | Update lecture highlights|
 | GET | `/fetch/course/section/{course}` | Fetch course sections|
 
-| GET    | `/transactions` | List all transactions|
-| GET | `/transactions/{id}` | Sgow transactions details |
-
-| GET    | `/course-purchases` | List all course purchases |
-| GET    | `/course-purchases/{id}` | Show course purchases details |
-
-| GET | `/reports` | Get course report|
-
 ---
 
 ## Protecting Admin Routes
@@ -101,8 +88,6 @@ Route::middleware(['web','admin.auth'])->group(function () {
 - `course_tag` - Pivot table linking courses to tag.
 - `course_sections` - Pivot table linking courses to sections.
 - `lectures` - Stores lectures details.
-- `course_purchases` - Pivot table linking courses to purchases.
-- `course_transactions` - Pivot table linking courses to transactions.
 
 ---
 

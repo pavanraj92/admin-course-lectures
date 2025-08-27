@@ -89,12 +89,14 @@ class Course extends Model
      */
     public function courseTags()
     {
-        return $this->belongsToMany(
-            'admin\tags\Models\Tag',
-            'course_tag',
-            'course_id',
-            'tag_id'
-        )->using(CourseTag::class)->withTimestamps();
+        if (class_exists(\admin\tags\Models\CourseTag::class)) {
+            return $this->belongsToMany(
+                \admin\tags\Models\Tag::class,
+                'course_tag',
+                'course_id',
+                'tag_id'
+            )->using(\admin\tags\Models\CourseTag::class)->withTimestamps();
+        }
     }
 
     /**
@@ -118,7 +120,9 @@ class Course extends Model
      */
     public function courseTagRelations()
     {
-        return $this->hasMany(CourseTag::class);
+        if (class_exists(\admin\tags\Models\CourseTag::class)) {
+            return $this->hasMany(\admin\tags\Models\CourseTag::class);
+        }
     }
 
     /**
