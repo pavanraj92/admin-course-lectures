@@ -2,10 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use admin\courses\Controllers\CourseManagerController;
-use admin\courses\Controllers\CoursePurchaseManagerController;
 use admin\courses\Controllers\LectureManagerController;
-use admin\courses\Controllers\ReportManagerController;
-use admin\courses\Controllers\TransactionManagerController;
 
 Route::name('admin.')->middleware(['web', 'admin.auth'])->group(function () {
 
@@ -19,14 +16,4 @@ Route::name('admin.')->middleware(['web', 'admin.auth'])->group(function () {
     Route::post('lectures/updateHighlight', [LectureManagerController::class, 'updateHighlight'])->name('lectures.updateHighlight');
     Route::get('fetch/course/section/{course}', [LectureManagerController::class, 'fetchCourseSections'])->name('courses.sections');
     Route::resource('lectures', LectureManagerController::class);
-
-    // Transactions
-    Route::resource('transactions', TransactionManagerController::class);
-
-    // Course Purchases
-    Route::resource('course-purchases', CoursePurchaseManagerController::class);
-
-    // Report
-    Route::get('reports', [ReportManagerController::class, 'index'])->name('reports.index');
-
 });

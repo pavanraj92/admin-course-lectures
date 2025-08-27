@@ -8,7 +8,6 @@ use admin\courses\Requests\Course\CourseCreateRequest;
 use admin\courses\Requests\Course\CourseUpdateRequest;
 use admin\courses\Models\Course;
 use admin\categories\Models\Category;
-use admin\tags\Models\Tag;
 use Illuminate\Support\Str;
 use admin\admin_auth\Services\ImageService;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +30,12 @@ class CourseManagerController extends Controller
     public function index(Request $request)
     {
         try {
-            $courses = Course::with(['categories', 'courseTags'])
+            $relations = ['categories'];
+            // only add courseTags if the relation exists
+            if (class_exists(\admin\tags\Models\Tag::class)) {
+                $relations[] = 'courseTags';
+            }
+            $courses = Course::with($relations)
                 ->filter($request->query('keyword'))
                 ->filterByStatus($request->query('status'))
                 ->filterByLevel($request->query('level'))
@@ -55,7 +59,11 @@ class CourseManagerController extends Controller
     {
         try {
             $categories = Category::all();
-            $tags = Tag::all();
+            if (class_exists(\admin\tags\Models\Tag::class)) {
+                $tags = \admin\tags\Models\Tag::isActive()->get();
+            } else {
+                $tags = collect(); // empty collection
+            }
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
             $statuses = ['pending', 'approved', 'rejected'];
             $languages = ['english', 'spanish', 'french', 'german', 'chinese', 'japanese', 'russian', 'arabic'];
@@ -70,11 +78,6 @@ class CourseManagerController extends Controller
     {
         try {
             $requestData = $request->validated();
-
-            // Generate slug if not provided
-            // if (empty($requestData['slug'])) {
-            //     $requestData['slug'] = Str::slug($requestData['title']);
-            // }
 
             //thumbnail_image upload
             if ($request->hasFile('thumbnail_image')) {
@@ -122,7 +125,14 @@ class CourseManagerController extends Controller
     public function show(Course $course)
     {
         try {
-            $course->load(['categories', 'courseTags', 'sections']);
+            $relations = ['categories', 'sections'];
+
+            // only add courseTags if the relation exists
+            if (class_exists(\admin\tags\Models\Tag::class)) {
+                $relations[] = 'courseTags';
+            }
+
+            $course->load($relations);
             return view('course::admin.course.show', compact('course'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to load course: ' . $e->getMessage());
@@ -132,9 +142,19 @@ class CourseManagerController extends Controller
     public function edit(Course $course)
     {
         try {
-            $course->load(['categories', 'courseTags', 'sections']);
+            $relations = ['categories', 'sections'];
+
+            // Load courseTags only if the relation exists
+            if (class_exists(\admin\tags\Models\Tag::class)) {
+                $relations[] = 'courseTags';
+            }
+            $course->load($relations);
             $categories = Category::all();
-            $tags = Tag::all();
+            if (class_exists(\admin\tags\Models\Tag::class)) {
+                $tags = \admin\tags\Models\Tag::isActive()->get();
+            } else {
+                $tags = collect(); // empty collection
+            }
             $levels = ['beginner', 'intermediate', 'advanced', 'expert'];
             $statuses = ['pending', 'approved', 'rejected'];
             $languages = ['english', 'spanish', 'french', 'german', 'chinese', 'japanese', 'russian', 'arabic'];
@@ -149,11 +169,6 @@ class CourseManagerController extends Controller
     {
         try {
             $requestData = $request->validated();
-
-            // Generate slug if not provided
-            // if (empty($requestData['slug'])) {
-            //     $requestData['slug'] = Str::slug($requestData['title']);
-            // }
 
             //thumbnail_image upload
             if ($request->hasFile('thumbnail_image')) {

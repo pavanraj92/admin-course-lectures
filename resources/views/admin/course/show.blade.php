@@ -129,24 +129,26 @@
                             <!-- End  Categories and tags -->
 
                             <!-- start tags -->
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header bg-primary">
-                                        <h5 class="mb-0 text-white">Tags</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        @if ($course->courseTags->count() > 0)
-                                            <ul class="list-group">
-                                                @foreach ($course->courseTags as $tag)
-                                                    <li class="mt-1">{{ $tag->name }}</li>
-                                                @endforeach
-                                            </ul>
-                                        @else
-                                            <span class="text-muted">No tags assigned</span>
-                                        @endif
+                            @if (class_exists(\admin\tags\Models\Tag::class))
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header bg-primary">
+                                            <h5 class="mb-0 text-white">Tags</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            @if ($course->courseTags->count() > 0)
+                                                <ul class="list-group">
+                                                    @foreach ($course->courseTags as $tag)
+                                                        <li class="mt-1">{{ $tag->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <span class="text-muted">No tags assigned</span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- end tags -->
 
                             <!-- start cours section -->

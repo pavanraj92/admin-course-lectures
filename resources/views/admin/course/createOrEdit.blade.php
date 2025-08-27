@@ -249,28 +249,30 @@
                                 </div>
                             </div>
                             <!-- end row -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Tags</label>
-                                        <select name="course_tags[]" id="course_tags" class="form-control select2"
-                                            multiple>
-                                            @foreach ($tags as $tag)
-                                                <option value="{{ $tag->id }}"
-                                                    {{ (isset($course) && $course->courseTags->contains($tag->id)) ||
-                                                    (is_array(old('course_tags')) && in_array($tag->id, old('course_tags')))
-                                                        ? 'selected'
-                                                        : '' }}>
-                                                    {{ $tag->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('course_tags')
-                                            <div class="text-danger validation-error">{{ $message }}</div>
-                                        @enderror
+                             @if (class_exists(\admin\tags\Models\Tag::class))
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Tags</label>
+                                            <select name="course_tags[]" id="course_tags" class="form-control select2"
+                                                multiple>
+                                                @foreach ($tags as $tag)
+                                                    <option value="{{ $tag->id }}"
+                                                        {{ (isset($course) && $course->courseTags->contains($tag->id)) ||
+                                                        (is_array(old('course_tags')) && in_array($tag->id, old('course_tags')))
+                                                            ? 'selected'
+                                                            : '' }}>
+                                                        {{ $tag->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('course_tags')
+                                                <div class="text-danger validation-error">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                             <!-- end row -->
                         </div>
                     </div>
