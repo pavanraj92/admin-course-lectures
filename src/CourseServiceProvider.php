@@ -12,65 +12,42 @@ class CourseServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->registerViewNamespaces();
-        $this->registerMigrations();
-        $this->registerConfigs();
-        $this->registerPublishables();
-        $this->registerAdminRoutes();
-    }
-
-    protected function registerViewNamespaces()
-    {
-        // Generic course views
+        // Load routes, views, migrations from the package  
         $this->loadViewsFrom([
-            base_path('Modules/Courses/resources/views'),
-            resource_path('views/admin/course'),
-            __DIR__ . '/../resources/views'
+            base_path('Modules/Courses/resources/views'), // Published module views first
+            resource_path('views/admin/course'), // Published views second
+            __DIR__ . '/../resources/views'      // Package views as fallback
         ], 'course');
 
-        // Lecture views
-        $this->loadViewsFrom([
-            base_path('Modules/Courses/resources/views'),
-            resource_path('views/admin/lecture'),
-            __DIR__ . '/../resources/views'
-        ], 'lecture');       
+        $this->mergeConfigFrom(__DIR__ . '/../config/course.php', 'course.constants');
 
-        // Extra namespace for explicit usage
+        // Also register module views with a specific namespace for explicit usage
         if (is_dir(base_path('Modules/Courses/resources/views'))) {
             $this->loadViewsFrom(base_path('Modules/Courses/resources/views'), 'courses-module');
         }
-    }
-
-    protected function registerMigrations()
-    {
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-
-        $publishedMigrations = base_path('Modules/Courses/database/migrations');
-        if (is_dir($publishedMigrations)) {
-            $this->loadMigrationsFrom($publishedMigrations);
+        // Also load migrations from published module if they exist
+        if (is_dir(base_path('Modules/Courses/database/migrations'))) {
+            $this->loadMigrationsFrom(base_path('Modules/Courses/database/migrations'));
         }
-    }
 
-    protected function registerConfigs()
-    {
-        $this->mergeConfigFrom(__DIR__ . '/../config/course.php', 'course.constants');
-        $this->mergeConfigFrom(__DIR__ . '/../config/course.php', 'courses.config');
-
-        $publishedConfig = base_path('Modules/Courses/config/course.php');
-        if (file_exists($publishedConfig)) {
-            $this->mergeConfigFrom($publishedConfig, 'courses.config');
+        // Also merge config from published module if it exists
+        if (file_exists(base_path('Modules/Courses/config/courses.php'))) {
+            $this->mergeConfigFrom(base_path('Modules/Courses/config/courses.php'), 'course.constants');
         }
-    }
 
-    protected function registerPublishables()
-    {
+        // Only publish automatically during package installation, not on every request
+        // Use 'php artisan courses:publish' command for manual publishing
+        // $this->publishWithNamespaceTransformation();
+
+        // Standard publishing for non-PHP files
         $this->publishes([
-            __DIR__ . '/../database/migrations' => base_path('Modules/Courses/database/migrations'),
-            __DIR__ . '/../resources/views'     => base_path('Modules/Courses/resources/views/'),
             __DIR__ . '/../config/' => base_path('Modules/Courses/config/'),
+            __DIR__ . '/../database/migrations' => base_path('Modules/Courses/database/migrations'),
+            __DIR__ . '/../resources/views' => base_path('Modules/Courses/resources/views/'),
         ], 'course');
 
-        $this->publishWithNamespaceTransformation();
+        $this->registerAdminRoutes();
     }
 
     protected function registerAdminRoutes()
@@ -86,9 +63,14 @@ class CourseServiceProvider extends ServiceProvider
         $slug = $admin->website_slug ?? 'admin';
 
         Route::middleware('web')
-            ->prefix("{$slug}/admin")
+            ->prefix("{$slug}/admin") // dynamic prefix
             ->group(function () {
-                $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+                // Load routes from published module first, then fallback to package
+                if (file_exists(base_path('Modules/Courses/routes/web.php'))) {
+                    $this->loadRoutesFrom(base_path('Modules/Courses/routes/web.php'));
+                } else {
+                    $this->loadRoutesFrom(__DIR__ . '/routes/web.php');
+                }
             });
     }
 
@@ -100,7 +82,6 @@ class CourseServiceProvider extends ServiceProvider
                 \admin\courses\Console\Commands\PublishCoursesModuleCommand::class,
                 \admin\courses\Console\Commands\CheckModuleStatusCommand::class,
                 \admin\courses\Console\Commands\DebugCoursesCommand::class,
-                \admin\courses\Console\Commands\TestViewResolutionCommand::class,
             ]);
         }
     }
@@ -110,59 +91,41 @@ class CourseServiceProvider extends ServiceProvider
      */
     protected function publishWithNamespaceTransformation()
     {
-        $moduleBase = base_path('Modules/Courses');
-        $srcBase = __DIR__ . '/../src';
-
         // Define the files that need namespace transformation
         $filesWithNamespaces = [
-
             // Controllers
-            "$srcBase/Controllers/CourseManagerController.php"          => "$moduleBase/app/Http/Controllers/Admin/CourseManagerController.php",
-            "$srcBase/Controllers/LectureManagerController.php"         => "$moduleBase/app/Http/Controllers/Admin/LectureManagerController.php",
+            __DIR__ . '/../src/Controllers/CourseManagerController.php' => base_path('Modules/Courses/app/Http/Controllers/Admin/CourseManagerController.php'),
+            __DIR__ . '/../src/Controllers/LectureManagerController.php' => base_path('Modules/Courses/app/Http/Controllers/Admin/LectureManagerController.php'),
 
             // Models
-            "$srcBase/Models/Course.php"            => "$moduleBase/app/Models/Course.php",
-            "$srcBase/Models/CourseCategory.php"    => "$moduleBase/app/Models/CourseCategory.php",
-            "$srcBase/Models/CourseSection.php"     => "$moduleBase/app/Models/CourseSection.php",
-            "$srcBase/Models/Lecture.php"           => "$moduleBase/app/Models/Lecture.php",
+            __DIR__ . '/../src/Models/Course.php' => base_path('Modules/Courses/app/Models/Course.php'),
+            __DIR__ . '/../src/Models/CourseCategory.php' => base_path('Modules/Courses/app/Models/CourseCategory.php'),
+            __DIR__ . '/../src/Models/CourseSection.php' => base_path('Modules/Courses/app/Models/CourseSection.php'),
+            __DIR__ . '/../src/Models/Lecture.php' => base_path('Modules/Courses/app/Models/Lecture.php'),
 
             // Requests
-            "$srcBase/Requests/Course/CourseCreateRequest.php"      => "$moduleBase/app/Http/Requests/Course/CourseCreateRequest.php",
-            "$srcBase/Requests/Course/CourseUpdateRequest.php"      => "$moduleBase/app/Http/Requests/Course/CourseUpdateRequest.php",
-            "$srcBase/Requests/Lecture/LectureCreateRequest.php"    => "$moduleBase/app/Http/Requests/Lecture/LectureCreateRequest.php",
-            "$srcBase/Requests/Lecture/LectureUpdateRequest.php"    => "$moduleBase/app/Http/Requests/Lecture/LectureUpdateRequest.php",
-
+            __DIR__ . '/../src/Requests/Course/CourseCreateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/CourseCreateRequest.php'),
+            __DIR__ . '/../src/Requests/Course/CourseUpdateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/CourseUpdateRequest.php'),
+            __DIR__ . '/../src/Requests/Course/LectureCreateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/LectureCreateRequest.php'),
+            __DIR__ . '/../src/Requests/Course/LectureUpdateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/LectureUpdateRequest.php'),
 
             // Routes
-            "$srcBase/routes/web.php" => "$moduleBase/routes/web.php",
+            __DIR__ . '/routes/web.php' => base_path('Modules/Courses/routes/web.php'),
         ];
 
-        foreach ($filesWithNamespaces as $from => $to) {
-            if (File::exists($from)) {
-                // Ensure the destination directory exists
-                $destinationDir = dirname($to);
-                if (!File::isDirectory($destinationDir)) {
-                    File::makeDirectory($destinationDir, 0755, true);
-                }
+        foreach ($filesWithNamespaces as $source => $destination) {
+            if (File::exists($source)) {
+                // Create destination directory if it doesn't exist
+                File::ensureDirectoryExists(dirname($destination));
 
                 // Read the source file
-                $content = File::get($from);
+                $content = File::get($source);
 
                 // Transform namespaces based on file type
-                if (str_contains($to, '/Controllers/')) {
-                    $content = str_replace('namespace admin\courses\Controllers;', 'namespace Modules\Courses\app\Http\Controllers\Admin;', $content);
-                    $content = str_replace('use admin\courses\Requests\\', 'use Modules\Courses\app\Http\Requests\\', $content);
-                    $content = str_replace('use admin\courses\Models\\', 'use Modules\Courses\app\Models\\', $content);
-                } elseif (str_contains($to, '/Models/')) {
-                    $content = str_replace('namespace admin\courses\Models;', 'namespace Modules\Courses\app\Models;', $content);
-                } elseif (str_contains($to, '/Requests/')) {
-                    $content = str_replace('namespace admin\courses\Requests;', 'namespace Modules\Courses\app\Http\Requests;', $content);
-                } elseif (str_contains($to, '/routes/')) {
-                    $content = str_replace('use admin\courses\Controllers\\', 'use Modules\Courses\app\Http\Controllers\Admin\\', $content);
-                }
+                $content = $this->transformNamespaces($content, $source);
 
-                // Write the transformed content
-                File::put($to, $content);
+                // Write the transformed content to destination
+                File::put($destination, $content);
             }
         }
     }
@@ -175,17 +138,18 @@ class CourseServiceProvider extends ServiceProvider
         // Define namespace mappings
         $namespaceTransforms = [
             // Main namespace transformations
-            'namespace admin\\courses\\Controllers;'    => 'namespace Modules\\Courses\\app\\Http\\Controllers\\Admin;',
-            'namespace admin\\courses\\Models;'         => 'namespace Modules\\Courses\\app\\Models;',
-            'namespace admin\\courses\\Requests;'       => 'namespace Modules\\Courses\\app\\Http\\Requests;',
+            'namespace admin\\courses\\Controllers;' => 'namespace Modules\\Courses\\app\\Http\\Controllers\\Admin;',
+            'namespace admin\\courses\\Models;' => 'namespace Modules\\Courses\\app\\Models;',
+            'namespace admin\\courses\\Requests;' => 'namespace Modules\\Courses\\app\\Http\\Requests;',
 
             // Use statements transformations
-            'use admin\\courses\\Controllers\\'         => 'use Modules\\Courses\\app\\Http\\Controllers\\Admin\\',
-            'use admin\\courses\\Models\\'              => 'use Modules\\Courses\\app\\Models\\',
-            'use admin\\courses\\Requests\\'            => 'use Modules\\Courses\\app\\Http\\Requests\\',
+            'use admin\\courses\\Controllers\\' => 'use Modules\\Courses\\app\\Http\\Controllers\\Admin\\',
+            'use admin\\courses\\Models\\' => 'use Modules\\Courses\\app\\Models\\',
+            'use admin\\courses\\Requests\\' => 'use Modules\\Courses\\app\\Http\\Requests\\',
 
             // Class references in routes
             'admin\\courses\\Controllers\\CourseManagerController' => 'Modules\\Courses\\app\\Http\\Controllers\\Admin\\CourseManagerController',
+            'admin\\courses\\Controllers\\LectureManagerController' => 'Modules\\Courses\\app\\Http\\Controllers\\Admin\\LectureManagerController',
         ];
 
         // Apply transformations
@@ -218,6 +182,21 @@ class CourseServiceProvider extends ServiceProvider
             'use Modules\\Courses\\app\\Models\\Course;',
             $content
         );
+        $content = str_replace(
+            'use admin\\courses\\Models\\CourseCategory;',
+            'use Modules\\Courses\\app\\Models\\CourseCategory;',
+            $content
+        );
+        $content = str_replace(
+            'use admin\\courses\\Models\\CourseSection;',
+            'use Modules\\Courses\\app\\Models\\CourseSection;',
+            $content
+        );
+        $content = str_replace(
+            'use admin\\courses\\Models\\Lecture;',
+            'use Modules\\Courses\\app\\Models\\Lecture;',
+            $content
+        );
 
         $content = str_replace(
             'use admin\\courses\\Requests\\Course\\CourseCreateRequest;',
@@ -227,7 +206,18 @@ class CourseServiceProvider extends ServiceProvider
 
         $content = str_replace(
             'use admin\\courses\\Requests\\Course\\CourseUpdateRequest;',
-            'use Modules\\Courses\\app\\Http\\Requests\\Course\\CourseUpdateRequest;',
+            'use Modules\\Courses\\app\\Http\\Requests\\CourseUpdateRequest;',
+            $content
+        );
+        $content = str_replace(
+            'use admin\\courses\\Requests\\Lecture\\LectureCreateRequest;',
+            'use Modules\\Courses\\app\\Http\\Requests\\Lecture\\LectureCreateRequest;',
+            $content
+        );
+
+        $content = str_replace(
+            'use admin\\courses\\Requests\\Lecture\\LectureUpdateRequest;',
+            'use Modules\\Courses\\app\\Http\\Requests\\Lecture\\LectureUpdateRequest;',
             $content
         );
 
@@ -239,11 +229,8 @@ class CourseServiceProvider extends ServiceProvider
      */
     protected function transformModelNamespaces($content)
     {
-        return str_replace(
-            'namespace admin\\courses\\Models;',
-            'namespace Modules\\Courses\\app\\Models;',
-            $content
-        );
+        // Any model-specific transformations
+        return $content;
     }
 
     /**
@@ -251,11 +238,8 @@ class CourseServiceProvider extends ServiceProvider
      */
     protected function transformRequestNamespaces($content)
     {
-        return str_replace(
-            'namespace admin\\courses\\Requests;',
-            'namespace Modules\\Courses\\app\\Http\\Requests;',
-            $content
-        );
+        // Any request-specific transformations
+        return $content;
     }
 
     /**
@@ -267,6 +251,11 @@ class CourseServiceProvider extends ServiceProvider
         $content = str_replace(
             'admin\\courses\\Controllers\\CourseManagerController',
             'Modules\\Courses\\app\\Http\\Controllers\\Admin\\CourseManagerController',
+            $content
+        );
+        $content = str_replace(
+            'admin\\courses\\Controllers\\LectureManagerController',
+            'Modules\\Courses\\app\\Http\\Controllers\\Admin\\LectureManagerController',
             $content
         );
 
