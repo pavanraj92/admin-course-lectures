@@ -57,6 +57,8 @@ class Course extends Model
      */
     protected $casts = [
         'is_highlight' => 'boolean',
+        'start_date' => 'datetime',
+        'end_date'   => 'datetime',
     ];
 
     /**
