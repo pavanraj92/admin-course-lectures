@@ -83,10 +83,14 @@
                                                     {{ ucfirst($course->level) }}
                                                 </span>
                                             </li>
-                                            <li class="mt-2"><strong>Language:</strong> {{ $course->language ?? 'N/A' }}</li>
-                                            <li class="mt-2"><strong>Duration:</strong> {{ $course->duration ?? 'N/A' }} weeks</li>
-                                            <li class="mt-2"><strong>Price:</strong> ${{ number_format($course->price ?? 0, 2) }}</li>
-                                            <li class="mt-2"><strong>Max Students:</strong> {{ $course->max_students }}</li>
+                                            <li class="mt-2"><strong>Language:</strong> {{ $course->language ?? 'N/A' }}
+                                            </li>
+                                            <li class="mt-2"><strong>Duration:</strong> {{ $course->duration ?? 'N/A' }}
+                                                weeks</li>
+                                            <li class="mt-2"><strong>Price:</strong>
+                                                ${{ number_format($course->price ?? 0, 2) }}</li>
+                                            <li class="mt-2"><strong>Max Students:</strong> {{ $course->max_students }}
+                                            </li>
                                             <li class="mt-2"><strong>Status:</strong>
                                                 @if ($course->status == 'approved')
                                                     <span class="badge badge-success">Approved</span>
@@ -99,7 +103,8 @@
                                                         class="badge badge-secondary">{{ ucfirst($course->status) }}</span>
                                                 @endif
                                             </li>
-                                            <li class="mt-2"><strong>Featured:</strong> {{ $course->is_highlighted ? 'Yes' : 'No' }}
+                                            <li class="mt-2"><strong>Featured:</strong>
+                                                {{ $course->is_highlighted ? 'Yes' : 'No' }}
                                             </li>
                                         </ul>
                                     </div>
@@ -213,15 +218,22 @@
                                     <div class="card-body">
                                         <ul class="list-unstyled">
                                             <li class="mt-1"><strong>Start Date:</strong>
-                                                {{ $course->start_date ? $course->start_date->format('Y-m-d') : 'N/A' }}
+                                                {{ $course->start_date
+                                                    ? $course->start_date->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s')
+                                                    : 'N/A' }}
                                             </li>
                                             <li class="mt-1"><strong>End Date:</strong>
-                                                {{ $course->end_date ? $course->end_date->format('Y-m-d') : 'N/A' }}</li>
+                                                {{ $course->end_date ? $course->end_date->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s') : 'N/A' }}
+                                            </li>
                                             <li class="mt-1"><strong>Created At:</strong>
-                                                {{ $course->created_at ? $course->created_at->format('Y-m-d') : 'N/A' }}
+                                                {{ $course->created_at
+                                                    ? $course->created_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s')
+                                                    : 'N/A' }}
                                             </li>
                                             <li class="mt-1"><strong>Updated At:</strong>
-                                                {{ $course->updated_at ? $course->updated_at->format('Y-m-d') : 'N/A' }}
+                                                {{ $course->updated_at
+                                                    ? $course->updated_at->format(config('GET.admin_date_time_format') ?? 'Y-m-d H:i:s')
+                                                    : 'N/A' }}
                                             </li>
                                         </ul>
                                     </div>
@@ -258,7 +270,7 @@
             </div>
             <!-- End col -->
         </div>
-        <!-- End row -->      
+        <!-- End row -->
     </div>
     <!-- End Container fluid  -->
 @endsection
