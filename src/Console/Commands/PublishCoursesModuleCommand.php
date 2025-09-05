@@ -78,12 +78,15 @@ class PublishCoursesModuleCommand extends Command
             // Main namespace transformations
             'namespace admin\\courses\\Controllers;' => 'namespace Modules\\Courses\\app\\Http\\Controllers\\Admin;',
             'namespace admin\\courses\\Models;' => 'namespace Modules\\Courses\\app\\Models;',
-            'namespace admin\\courses\\Requests;' => 'namespace Modules\\Courses\\app\\Http\\Requests;',
+            'namespace admin\\courses\\Requests\\Course;' => 'namespace Modules\\Courses\\app\\Http\\Requests\\Course;',
+            'namespace admin\\courses\\Requests\\Lecture;' => 'namespace Modules\\Courses\\app\\Http\\Requests\\Lecture;',
 
             // Use statements transformations
             'use admin\\courses\\Controllers\\' => 'use Modules\\Courses\\app\\Http\\Controllers\\Admin\\',
             'use admin\\courses\\Models\\' => 'use Modules\\Courses\\app\\Models\\',
-            'use admin\\courses\\Requests\\' => 'use Modules\\Courses\\app\\Http\\Requests\\',
+            'use admin\\courses\\Requests\\Course\\' => 'use Modules\\Courses\\app\\Http\\Requests\\Course\\',
+            'use admin\\courses\\Requests\\Lecture\\' => 'use Modules\\Courses\\app\\Http\\Requests\\Lecture\\',
+
 
             // Class references in routes
             'admin\\courses\\Controllers\\CourseManagerController' => 'Modules\\Courses\\app\\Http\\Controllers\\Admin\\CourseManagerController',
