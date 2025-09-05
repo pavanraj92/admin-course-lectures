@@ -19,7 +19,13 @@ class CourseServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/views'      // Package views as fallback
         ], 'course');
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/course.php', 'course.constants');
+        // Load published module config first (if it exists), then fallback to package config
+        if (file_exists(base_path('Modules/Courses/config/course.php'))) {
+            $this->mergeConfigFrom(base_path('Modules/Courses/config/course.php'), 'course.constants');
+        } else {
+            // Fallback to package config if published config doesn't exist
+            $this->mergeConfigFrom(__DIR__ . '/../config/course.php', 'course.constants');
+        }
 
         // Also register module views with a specific namespace for explicit usage
         if (is_dir(base_path('Modules/Courses/resources/views'))) {
@@ -29,11 +35,6 @@ class CourseServiceProvider extends ServiceProvider
         // Also load migrations from published module if they exist
         if (is_dir(base_path('Modules/Courses/database/migrations'))) {
             $this->loadMigrationsFrom(base_path('Modules/Courses/database/migrations'));
-        }
-
-        // Also merge config from published module if it exists
-        if (file_exists(base_path('Modules/Courses/config/courses.php'))) {
-            $this->mergeConfigFrom(base_path('Modules/Courses/config/courses.php'), 'course.constants');
         }
 
         // Only publish automatically during package installation, not on every request
