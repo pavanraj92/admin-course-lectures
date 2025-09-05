@@ -106,8 +106,8 @@ class CourseServiceProvider extends ServiceProvider
             // Requests
             __DIR__ . '/../src/Requests/Course/CourseCreateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/CourseCreateRequest.php'),
             __DIR__ . '/../src/Requests/Course/CourseUpdateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/CourseUpdateRequest.php'),
-            __DIR__ . '/../src/Requests/Course/LectureCreateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/LectureCreateRequest.php'),
-            __DIR__ . '/../src/Requests/Course/LectureUpdateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Course/LectureUpdateRequest.php'),
+            __DIR__ . '/../src/Requests/Lecture/LectureCreateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Lecture/LectureCreateRequest.php'),
+            __DIR__ . '/../src/Requests/Lecture/LectureUpdateRequest.php' => base_path('Modules/Courses/app/Http/Requests/Lecture/LectureUpdateRequest.php'),
 
             // Routes
             __DIR__ . '/routes/web.php' => base_path('Modules/Courses/routes/web.php'),
@@ -140,12 +140,14 @@ class CourseServiceProvider extends ServiceProvider
             // Main namespace transformations
             'namespace admin\\courses\\Controllers;' => 'namespace Modules\\Courses\\app\\Http\\Controllers\\Admin;',
             'namespace admin\\courses\\Models;' => 'namespace Modules\\Courses\\app\\Models;',
-            'namespace admin\\courses\\Requests;' => 'namespace Modules\\Courses\\app\\Http\\Requests;',
+            'namespace admin\\courses\\Requests\\Course;' => 'namespace Modules\\Courses\\app\\Http\\Requests\\Course;',
+            'namespace admin\\courses\\Requests\\Lecture;' => 'namespace Modules\\Courses\\app\\Http\\Requests\\Lecture;',
 
             // Use statements transformations
             'use admin\\courses\\Controllers\\' => 'use Modules\\Courses\\app\\Http\\Controllers\\Admin\\',
             'use admin\\courses\\Models\\' => 'use Modules\\Courses\\app\\Models\\',
-            'use admin\\courses\\Requests\\' => 'use Modules\\Courses\\app\\Http\\Requests\\',
+            'use admin\\courses\\Requests\\Course\\' => 'use Modules\\Courses\\app\\Http\\Requests\\Course\\',
+            'use admin\\courses\\Requests\\Lecture\\' => 'use Modules\\Courses\\app\\Http\\Requests\\Lecture\\',
 
             // Class references in routes
             'admin\\courses\\Controllers\\CourseManagerController' => 'Modules\\Courses\\app\\Http\\Controllers\\Admin\\CourseManagerController',
