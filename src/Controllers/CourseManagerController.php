@@ -185,15 +185,11 @@ class CourseManagerController extends Controller
             // Sync categories if provided
             if (isset($requestData['categories'])) {
                 $course->categories()->sync($requestData['categories']);
-            } else {
-                $course->categories()->sync([]);
             }
 
             // Sync tags if provided
             if (isset($requestData['course_tags'])) {
                 $course->courseTags()->sync($requestData['course_tags']);
-            } else {
-                $course->courseTags()->sync([]);
             }
 
             // Handle course sections
