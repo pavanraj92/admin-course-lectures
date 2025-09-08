@@ -202,6 +202,18 @@ class CourseServiceProvider extends ServiceProvider
         );
 
         $content = str_replace(
+            'use admin\\categories\\Models\\Category;',
+            'use Modules\\Categories\\app\\Models\\Category;',
+            $content
+        );
+
+        $content = str_replace(
+            'use admin\admin_auth\Services\ImageService;',
+            'use Modules\\AdminAuth\\app\\Services\\ImageService;',
+            $content
+        );
+
+        $content = str_replace(
             'use admin\\courses\\Requests\\Course\\CourseCreateRequest;',
             'use Modules\\Courses\\app\\Http\\Requests\\Course\\CourseCreateRequest;',
             $content
