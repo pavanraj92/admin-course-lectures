@@ -217,4 +217,11 @@ class Course extends Model
     {
         return ucfirst($this->level);
     }
+
+    public static function getPerPageLimit(): int
+    {
+        return Config::has('get.admin_page_limit')
+            ? Config::get('get.admin_page_limit')
+            : 10;
+    }
 }

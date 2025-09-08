@@ -42,7 +42,7 @@ class CourseManagerController extends Controller
                 ->filterByLanguage($request->query('language'))
                 ->sortable()
                 ->latest()
-                ->paginate(15)
+                ->paginate(Course::getPerPageLimit())
                 ->withQueryString();
 
             $statuses = ['pending', 'approved', 'rejected'];

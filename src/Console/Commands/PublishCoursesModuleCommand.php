@@ -125,6 +125,18 @@ class PublishCoursesModuleCommand extends Command
                 'use Modules\\Courses\\app\\Models\\Lecture;',
                 $content
             );
+
+            $content = str_replace(
+                'use admin\\categories\\Models\\Category;',
+                'use Modules\\Categories\\app\\Models\\Category;',
+                $content
+            );
+
+            $content = str_replace(
+                'use admin\admin_auth\Services\ImageService;',
+                'use Modules\\AdminAuth\\app\\Services\\ImageService;',
+                $content
+            );
            
             $content = str_replace(
                 'use admin\\courses\\Requests\\Course\\CourseCreateRequest;',
