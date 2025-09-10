@@ -20,6 +20,23 @@ class LectureUpdateRequest extends FormRequest
     public function rules(): array
     {
         $lectureId = $this->route('lecture') ? $this->route('lecture')->id : null;
+        $lecture = $lectureId ? \admin\courses\Models\Lecture::find($lectureId) : null;
+        
+        // For video: only require if type is video AND no existing video AND no new video uploaded
+        $videoRequired = false;
+        if ($this->input('type') === 'video') {
+            $hasExistingVideo = $lecture && $lecture->video;
+            $hasNewVideo = $this->hasFile('video');
+            $videoRequired = !$hasExistingVideo && !$hasNewVideo;
+        }
+        
+        // For audio: only require if type is audio AND no existing audio AND no new audio uploaded
+        $audioRequired = false;
+        if ($this->input('type') === 'audio') {
+            $hasExistingAudio = $lecture && $lecture->audio;
+            $hasNewAudio = $this->hasFile('audio');
+            $audioRequired = !$hasExistingAudio && !$hasNewAudio;
+        }
         
         return [
             'course_id' => 'required|exists:courses,id',
@@ -28,8 +45,8 @@ class LectureUpdateRequest extends FormRequest
             'short_description' => 'nullable|string|max:500',
             'description' => 'nullable|string',            
             'type' => 'required|in:video,audio',
-            'video' => 'required_if:type,video|nullable|file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
-            'audio' => 'required_if:type,audio|nullable|file|mimes:mp3,wav,ogg|max:20480',
+            'video' => ($videoRequired ? 'required|' : 'nullable|') . 'file|mimes:mp4,avi,mov,wmv,flv,webm|max:102400', // 100MB max
+            'audio' => ($audioRequired ? 'required|' : 'nullable|') . 'file|mimes:mp3,wav,ogg|max:20480',
             'attachment' => 'nullable|file|mimes:jpg,pdf,doc,docx,ppt,pptx,xls,xlsx,zip,rar|max:51200', // 50MB max
             'duration' => 'nullable|integer|min:1',
             'order' => 'nullable|integer|min:0',
@@ -52,9 +69,13 @@ class LectureUpdateRequest extends FormRequest
             'short_description.max' => 'Short description cannot exceed 500 characters.',
             'type.required' => 'Lecture type is required.',
             'type.in' => 'Lecture type must be video, audio.',
+            'video.required' => 'Please upload a video file when lecture type is video.',
             'video.mimes' => 'Video must be a file of type: mp4, avi, mov, wmv, flv, webm.',
             'video.max' => 'Video file size cannot exceed 100MB.',
-            'attachment.mimes' => 'Attachment must be a file of type: pdf, doc, docx, ppt, pptx, xls, xlsx, zip, rar.',
+            'audio.required' => 'Please upload an audio file when lecture type is audio.',
+            'audio.mimes' => 'Audio must be a file of type: mp3, wav, ogg.',
+            'audio.max' => 'Audio file size cannot exceed 20MB.',
+            'attachment.mimes' => 'Please upload a valid file. Allowed file types: JPG, PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, RAR (Max: 50MB).',
             'attachment.max' => 'Attachment file size cannot exceed 50MB.',
             'duration.integer' => 'Duration must be a number.',
             'duration.min' => 'Duration must be at least 1 minute.',
