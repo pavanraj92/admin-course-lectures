@@ -250,12 +250,12 @@
                                 <div class="dz-message">
                                     <i class="mdi mdi-file-document mdi-48px text-muted"></i>
                                     <h4>Drop file here or click to upload</h4>
-                                    <p class="text-muted">Supported formats: PDF, DOC, DOCX, PPT, PPTX (Max: 10MB)</p>
+                                    <p class="text-muted">Supported formats: JPG, PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, RAR (Max: 50MB)</p>
                                 </div>
                             </div>
                             <!-- Hidden file input -->
                             <input type="file" id="attachmentFileInput" name="attachment"
-                                accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip,.rar" style="display: none;">
+                                accept=".jpg,.jpeg,.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar" style="display: none;">
                             @error('attachment')
                             <div class="text-danger validation-error">{{ $message }}</div>
                             @enderror
@@ -483,18 +483,19 @@
                 },
                 video: {
                     required: function() {
-                        return $('#type').val() === 'video' && $('#videoPreview .existing-file').length === 0;
+                        return $('#type').val() === 'video' && $('#videoPreview .existing-file').length === 0 && $('#videoPreview .new-file').length === 0;
                     },
                     extension: "mp4|avi|mov|wmv"
                 },
                 audio: {
                     required: function() {
-                        return $('#type').val() === 'audio' && $('#audioPreview .existing-file').length === 0;
+                        return $('#type').val() === 'audio' && $('#audioPreview .existing-file').length === 0 && $('#audioPreview .new-file').length === 0;
                     },
                     extension: "mp3|wav|aac"
                 },
                 attachment: {
-                    extension: "pdf|doc|docx|ppt|pptx|txt|zip|rar"
+                    accept: "image/jpeg, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/zip, application/x-rar-compressed",
+                    extension: "jpg|jpeg|pdf|doc|docx|ppt|pptx|xls|xlsx|zip|rar"
                 }
             },
             messages: {
