@@ -221,7 +221,7 @@ class CourseServiceProvider extends ServiceProvider
 
         $content = str_replace(
             'use admin\\courses\\Requests\\Course\\CourseUpdateRequest;',
-            'use Modules\\Courses\\app\\Http\\Requests\\CourseUpdateRequest;',
+            'use Modules\\Courses\\app\\Http\\Requests\\Course\\CourseUpdateRequest;',
             $content
         );
         $content = str_replace(
