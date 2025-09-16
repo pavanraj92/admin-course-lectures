@@ -79,8 +79,9 @@
                                         <label>Language <span class="text-danger">*</span></label>
                                         <!--select2 drop down for the languages-->
                                         <select name="language" id="language" class="form-control select2" required>
-                                            @foreach($languages as $lang)
-                                                <option value="{{ $lang }}" {{ old('language', $course->language ?? 'English') == $lang ? 'selected' : '' }}>
+                                            @foreach ($languages as $lang)
+                                                <option value="{{ $lang }}"
+                                                    {{ old('language', $course->language ?? 'English') == $lang ? 'selected' : '' }}>
                                                     {{ Str::ucfirst($lang) }}
                                                 </option>
                                             @endforeach
@@ -172,8 +173,8 @@
                                             <img src="{{ asset('storage/' . $course->thumbnail_image) }}"
                                                 alt="Course Image" class="thumbnail w-100">
                                         @else
-                                            <img src="{{ asset('images/noimage.png') }}"
-                                                alt="Default Course Image" class="w-100 h-50">
+                                            <img src="{{ asset('images/noimage.png') }}" alt="Default Course Image"
+                                                class="w-100 h-50">
                                         @endif
                                     </div>
                                 </div>
@@ -194,9 +195,9 @@
                                                 <source src="{{ asset('storage/' . $course->promo_video) }}"
                                                     type="video/mp4">Your browser does not support the video tag.
                                             </video>
-                                        @else                                            
-                                            <img src="{{ asset('images/novideo.png') }}"
-                                                alt="Default Course Image" class="w-50">
+                                        @else
+                                            <img src="{{ asset('images/novideo.png') }}" alt="Default Course Image"
+                                                class="w-50">
                                         @endif
                                     </div>
                                 </div>
@@ -249,7 +250,7 @@
                                 </div>
                             </div>
                             <!-- end row -->
-                             @if (class_exists(\admin\tags\Models\Tag::class))
+                            @if (class_exists(\admin\tags\Models\Tag::class))
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -436,33 +437,25 @@
 @endsection
 
 @push('styles')
-    <!-- ckeditor CSS -->
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/43.0.0/ckeditor5.css">
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- datepicker CSS jquery UI -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <style>
         #addSectionBtn {
             float: right;
             margin-top: -5px;
         }
+
         .card-header h4 {
             margin-bottom: 0;
         }
+
         .form-control[readonly] {
             background-color: #ffffff;
-        }     
+        }
     </style>
 @endpush
 
 @push('scripts')
-    <!-- jQuery Validation plugin -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <!-- Include the CKEditor script -->
-    <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
     <!-- jQuery UI for datepicker -->
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
@@ -474,19 +467,6 @@
                 allowClear: true,
                 width: '100%'
             });
-
-            // Auto-generate slug from title
-            // $('#title').on('input', function() {
-            //     if ($('#slug').val() === '') {
-            //         var slug = $(this).val().toLowerCase()
-            //             .replace(/[^a-z0-9 -]/g, '') // remove invalid characters
-            //             .replace(/\s+/g, '-') // replace spaces with hyphens
-            //             .replace(/-+/g, '-'); // remove duplicate hyphens
-            //         $('#slug').val(slug);
-            //     }
-            // });
-
-            // Remove old image input logic (Dropzone now handles preview)
 
             // jQuery validation for the form
             $('#courseForm').validate({
@@ -503,7 +483,7 @@
                         required: true
                     },
                     language: {
-                        required: true                      
+                        required: true
                     },
                     duration: {
                         required: true,
@@ -520,22 +500,12 @@
                         min: 1
                     },
                     start_date: {
-                        date: true,                        
+                        date: true,
                     },
                     end_date: {
                         date: true,
-                        
+
                     },
-                    // thumbnail_image: {
-                    //     required: function() {
-                    //         return $('input[name="thumbnail_image"]').val() === '' && $('#imagePreview img.thumbnail').length === 0;
-                    //     }
-                    // },
-                    // promo_video: {
-                    //     required: function() {
-                    //         return $('input[name="promo_video"]').val() === '' && $('#videoPreview video').length === 0;
-                    //     }
-                    // },
                     'categories[]': {
                         required: true,
                         minlength: 1
@@ -597,14 +567,15 @@
                 errorPlacement: function(error, element) {
                     $('.validation-error').hide(); // hide blade errors
                     if (element.hasClass('select2-hidden-accessible')) {
-                        error.insertAfter(element.next('.select2')); // place error after select2 container
+                        error.insertAfter(element.next(
+                            '.select2')); // place error after select2 container
                     } else {
                         error.insertAfter(element);
                     }
                 }
             });
 
-             // Image preview functionality
+            // Image preview functionality
             $('#imageInput').on('change', function(event) {
                 const input = event.target;
                 const preview = $('#imagePreview');
@@ -708,9 +679,7 @@
                 });
             }
         });
-    </script>
-    <!-- datepicker initialization -->
-    <script>
+
         $(function() {
             $("#start_date, #end_date").datepicker({
                 dateFormat: 'dd-mm-yy',
@@ -736,31 +705,63 @@
                 }
             });
         });
-    </script>
-    <!-- Initialize CKEditor -->
-    <script>
         //initialize CKEditor for the short description field
-        ClassicEditor
-            .create(document.querySelector('#short_description'))
-            .then(editor => {
-                editor.ui.view.editable.element.style.minHeight = '100px';
-                editor.ui.view.editable.element.style.maxHeight = '100px';
-                editor.ui.view.editable.element.style.overflowY = 'auto'; // optional scroll
-            })
-            .catch(error => {
-                console.error(error);
+        $(document).ready(function() {
+            $('#short_description').summernote({
+                height: 250, // ✅ editor height
+                minHeight: 250,
+                maxHeight: 250,
+                toolbar: [
+                    // ✨ Add "code view" toggle button
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture']],
+                    ['view', ['codeview']],
+                    ['undo', ['undo', 'redo']]
+                ],
+                callbacks: {
+                    onChange: function(contents, $editable) {
+                        // keep textarea updated
+                        $('#short_description').val(contents);
+                        // trigger validation if needed
+                        $('#short_description').trigger('keyup');
+                    }
+                }
             });
-
+        });
         // Initialize CKEditor for the description field
-        ClassicEditor
-            .create(document.querySelector('#description'))
-            .then(editor => {
-                editor.ui.view.editable.element.style.minHeight = '250px';
-                editor.ui.view.editable.element.style.maxHeight = '250px';
-                editor.ui.view.editable.element.style.overflowY = 'auto'; // optional scroll
-            })
-            .catch(error => {
-                console.error(error);
+        $(document).ready(function() {
+            $('#description').summernote({
+                height: 250, // ✅ editor height
+                minHeight: 250,
+                maxHeight: 250,
+                toolbar: [
+                    // ✨ Add "code view" toggle button
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['insert', ['link', 'picture']],
+                    ['view', ['codeview']],
+                    ['undo', ['undo', 'redo']]
+                ],
+                callbacks: {
+                    onChange: function(contents, $editable) {
+                        // keep textarea updated
+                        $('#description').val(contents);
+                        // trigger validation if needed
+                        $('#description').trigger('keyup');
+                    }
+                }
             });
+        });
     </script>
 @endpush
