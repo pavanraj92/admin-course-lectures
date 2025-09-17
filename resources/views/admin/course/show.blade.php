@@ -134,7 +134,7 @@
                             <!-- End  Categories and tags -->
 
                             <!-- start tags -->
-                            @if (class_exists(\admin\tags\Models\Tag::class))
+                            @if (admin\courses\Models\Course::isModuleInstalled('tags'))
                                 <div class="col-md-4">
                                     <div class="card">
                                         <div class="card-header bg-primary">

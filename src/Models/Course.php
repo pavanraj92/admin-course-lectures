@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Config;
 use Kyslik\ColumnSortable\Sortable;
 use Illuminate\Support\Str;
+use admin\tags\Models\Tag;
+use admin\tags\Models\CourseTag;
+use Illuminate\Support\Facades\DB;
 
 
 class Course extends Model
@@ -91,13 +94,13 @@ class Course extends Model
      */
     public function courseTags()
     {
-        if (class_exists(\admin\tags\Models\CourseTag::class)) {
+        if (self::isModuleInstalled('tags')) {
             return $this->belongsToMany(
-                \admin\tags\Models\Tag::class,
+                Tag::class,
                 'course_tag',
                 'course_id',
                 'tag_id'
-            )->using(\admin\tags\Models\CourseTag::class)->withTimestamps();
+            )->using(CourseTag::class)->withTimestamps();
         }
     }
 
@@ -122,8 +125,8 @@ class Course extends Model
      */
     public function courseTagRelations()
     {
-        if (class_exists(\admin\tags\Models\CourseTag::class)) {
-            return $this->hasMany(\admin\tags\Models\CourseTag::class);
+        if (self::isModuleInstalled('tags')) {
+            return $this->hasMany(CourseTag::class);
         }
     }
 
@@ -223,5 +226,13 @@ class Course extends Model
         return Config::has('get.admin_page_limit')
             ? Config::get('get.admin_page_limit')
             : 10;
+    }
+
+    public static function isModuleInstalled($moduleName)
+    {
+        return DB::table('packages')
+            ->where('name', $moduleName)
+            ->where('is_installed', 1)
+            ->exists();
     }
 }

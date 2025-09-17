@@ -250,7 +250,7 @@
                                 </div>
                             </div>
                             <!-- end row -->
-                            @if (class_exists(\admin\tags\Models\Tag::class))
+                            @if (admin\courses\Models\Course::isModuleInstalled('tags'))
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
