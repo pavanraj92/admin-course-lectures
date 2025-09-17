@@ -206,6 +206,18 @@ class CourseServiceProvider extends ServiceProvider
             'use Modules\\Categories\\app\\Models\\Category;',
             $content
         );
+        
+        $content = str_replace(
+            'use admin\\tags\\Models\\Tag;',
+            'use Modules\\Tags\\app\\Models\\Tag;',
+            $content
+        );
+        
+        $content = str_replace(
+            'use admin\\tags\\Models\\CourseTag;',
+            'use Modules\\Tags\\app\\Models\\CourseTag;',
+            $content
+        );
 
         $content = str_replace(
             'use admin\admin_auth\Services\ImageService;',
@@ -245,6 +257,17 @@ class CourseServiceProvider extends ServiceProvider
     protected function transformModelNamespaces($content)
     {
         // Any model-specific transformations
+        $content = str_replace(
+            'use admin\\tags\\Models\\Tag;',
+            'use Modules\\Tags\\app\\Models\\Tag;',
+            $content
+        );
+
+        $content = str_replace(
+            'use admin\\tags\\Models\\CourseTag;',
+            'use Modules\\Tags\\app\\Models\\CourseTag;',
+            $content
+        );
         return $content;
     }
 

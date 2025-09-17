@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use admin\admin_auth\Services\ImageService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use admin\tags\Models\Tag;
 
 class CourseManagerController extends Controller
 {
@@ -32,7 +33,7 @@ class CourseManagerController extends Controller
         try {
             $relations = ['categories'];
             // only add courseTags if the relation exists
-            if (class_exists(\admin\tags\Models\Tag::class)) {
+            if (Course::isModuleInstalled('tags')) {
                 $relations[] = 'courseTags';
             }
             $courses = Course::with($relations)
@@ -59,8 +60,8 @@ class CourseManagerController extends Controller
     {
         try {
             $categories = Category::all();
-            if (class_exists(\admin\tags\Models\Tag::class)) {
-                $tags = \admin\tags\Models\Tag::isActive()->get();
+            if (Course::isModuleInstalled('tags')) {
+                $tags = Tag::isActive()->get();
             } else {
                 $tags = collect(); // empty collection
             }
@@ -128,7 +129,7 @@ class CourseManagerController extends Controller
             $relations = ['categories', 'sections'];
 
             // only add courseTags if the relation exists
-            if (class_exists(\admin\tags\Models\Tag::class)) {
+            if (Course::isModuleInstalled('tags')) {
                 $relations[] = 'courseTags';
             }
 
@@ -145,13 +146,13 @@ class CourseManagerController extends Controller
             $relations = ['categories', 'sections'];
 
             // Load courseTags only if the relation exists
-            if (class_exists(\admin\tags\Models\Tag::class)) {
+            if (Course::isModuleInstalled('tags')) {
                 $relations[] = 'courseTags';
             }
             $course->load($relations);
             $categories = Category::all();
-            if (class_exists(\admin\tags\Models\Tag::class)) {
-                $tags = \admin\tags\Models\Tag::isActive()->get();
+            if (Course::isModuleInstalled('tags')) {
+                $tags = Tag::isActive()->get();
             } else {
                 $tags = collect(); // empty collection
             }
