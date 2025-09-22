@@ -248,15 +248,22 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex flex-column">
-                                            <a href="{{ route('admin.courses.edit', $course) }}"
-                                                class="btn btn-warning mb-2">
-                                                <i class="fa fa-edit"></i> Edit Course
-                                            </a>
-
-                                            <button type="button" class="btn btn-danger delete-btn"
-                                                data-url="{{ route('admin.courses.destroy', $course) }}">
-                                                <i class="fa fa-trash"></i> Delete Course
-                                            </button>
+                                            @admincan('courses_manager_edit')
+                                                <a href="{{ route('admin.courses.edit', $course) }}"
+                                                    class="btn btn-warning mb-2">
+                                                    <i class="fa fa-edit"></i> Edit Course
+                                                </a>
+                                            @endadmincan
+                                            @admincan('courses_manager_delete')
+                                                <button type="button" class="btn btn-danger delete-btn delete-record"
+                                                    title="Delete this record"
+                                                    data-url="{{ route('admin.courses.destroy', $course) }}"
+                                                    data-redirect="{{ route('admin.courses.index') }}"
+                                                    data-text="Are you sure you want to delete this record?"
+                                                    data-method="DELETE">
+                                                    <i class="mdi mdi-delete"></i> Delete Course
+                                                </button>
+                                            @endadmincan
                                         </div>
                                     </div>
                                 </div>
